@@ -11,11 +11,11 @@ namespace MATH
     public:
         //members
         T x, y, z;
+
         //constructors
         Vector3 () : x(0), y(0), z(0) {}
         Vector3 (T v) : x(v), y(v), z(v) {}
         Vector3 (T v1, T v2, T v3) : x(v1), y(v2), z(v3) {}
-
 
         //overloaded operators
         Vector3 &operator * (const T &v)
@@ -77,6 +77,19 @@ namespace MATH
                 x *= factor, y *= factor, z *= factor;
             }
             return *this;
+        }
+
+        Vector3 cross(const Vector3<T> &v)
+        {
+            Vector3<T> result = Vector3<T>(y * v.z - z * v.y,
+                              z * v.x - x * v.z,
+                              x * v.y - y * v.x);
+            return result;
+        }
+
+        T dot(const Vector3<T> &v)
+        {
+            return x * v.x + y * v.y + z * v.z;
         }
     };
 
