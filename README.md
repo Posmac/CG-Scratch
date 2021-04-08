@@ -7,9 +7,9 @@ MY PLAN:
    b) Matrices (4x4 only)                                   
    
 2) RayTracer:                                    
-   a) Raytracing simple spheres
-   b) Light them
-   c) Shadows and reflections
-   d) ....
-3) Rasterizer
-   a)...
+   a) Raytracing simple spheres                            
+   b) Light them                                                    
+   c) Shadows and reflections                                           
+   d) ....                                             
+3) Rasterizer                                               
+   a)...                                              
