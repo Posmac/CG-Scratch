@@ -1,0 +1,55 @@
+# visual studio specific files
+*.user
+*.ncb
+*.sbr
+*.suo
+*.ilk
+*.bsc
+*.pdb
+*.aps
+*.pch
+*.sdf
+*.opensdf
+*.ipch
+*.obj
+*.log
+
+*.sln.docstates
+ipch/
+
+# xcode specific files
+*.pbxuser
+*.ext
+*.mode1v3
+*.perspectivev3
+xcuserdata/
+
+# autotools specific files
+*.sym
+Makefile.in
+config.h.in
+autom4te.cache/
+build-aux/
+configure
+
+# build files
+build/
+obj
+*.obj
+*.o
+
+# vi / vim files
+*~
+.*.swp
+
+# OSX finder crap
+.DS_Store
+
+# temporary
+temp
+tmp
+.tmp
+
+# git
+*.orig
+*.rej
