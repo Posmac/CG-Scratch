@@ -33,6 +33,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="Headers/math.h" />
+		<Unit filename="Headers/shapes.h" />
 		<Unit filename="SourceFiles/main.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

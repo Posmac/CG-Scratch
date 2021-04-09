@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-namespace MATH
+namespace cgm //Computer Graphics Mathematics
 {
     template<typename T>
     class Vector3
