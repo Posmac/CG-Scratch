@@ -21,13 +21,13 @@ float viewPortSize = 1.0f;
 float projectionPlaneDistance = 1.0f;
 cgm::Vector3f cameraPosition (0.0f);
 cgm::Vector3f backGroundColor (255.0f);
-const int canvas_width = 16;
-const int canvas_height = 16;
+const int canvas_width = 1024;
+const int canvas_height = 1024;
 
  RT::Sphere spheres[3] = { RT::Sphere(cgm::Vector3f(0.0f, -1.0f, 3.0f), cgm::Vector3f(255.0f, 0.0f, 0.0f), 1.0f),
-                              RT::Sphere(cgm::Vector3f(2.0f,  0.0f, 4.0f), cgm::Vector3f(0.0f,  255.0f, 0.0f), 1.0f),
-                              RT::Sphere(cgm::Vector3f(-2.0f, 0.0f, 4.0f), cgm::Vector3f(0.0f, 0.0f, 255.0f), 1.0f)};
-cgm::Vector3<unsigned char> *canvasBuffer = new cgm::Vector3<unsigned char>[canvas_height * canvas_width];
+                              RT::Sphere(cgm::Vector3f(2.0f,  1.0f, 4.0f), cgm::Vector3f(0.0f,  255.0f, 0.0f), 1.0f),
+                              RT::Sphere(cgm::Vector3f(-2.0f,  1.0f, 4.0f), cgm::Vector3f(0.0f, 0.0f, 255.0f), 1.0f)};
+cgm::Vector3<float> *canvasBuffer = new cgm::Vector3<float>[canvas_height * canvas_width];
 
 
 //Utility fucntions
@@ -97,10 +97,18 @@ void PutPixel(float x, float y, cgm::Vector3f color)
 {
     x = canvas_width/2 + x;
     y = canvas_height/2 - y;
-    //std::cout << x << "  " << y << "  " << color << std::endl;
+
     if(x < 0 || x > canvas_width || y < 0 || y > canvas_height)
         return;
     //there to complete
+    int number = x * canvas_width + y;
+    canvasBuffer[number-1].x  = color.x;
+    canvasBuffer[number-1].y  = color.y;
+    canvasBuffer[number-1].z  = color.z;
+    /*std::cout << canvasBuffer[b * canvas_height + a].x << "  "
+              << canvasBuffer[b * canvas_height + a].y << "  "
+              << canvasBuffer[b * canvas_height + a].z << std::endl;*/
+    //std::cout << x << " " << y << "  " << x * canvas_width + y << std::endl;
 }
 
 int main()
@@ -115,5 +123,21 @@ int main()
             PutPixel(i,j,color);
         }
     }
+
+    std::ofstream ofs;
+    ofs.open("./output.ppm");
+    ofs << "P3\n" << canvas_width << " " << canvas_height << "\n255\n";
+    for(int i = 0; i < canvas_height; i++)
+    {
+        for(int j = 0; j < canvas_width; j ++)
+        {
+            ofs << canvasBuffer[j * canvas_width + i].x << " "
+                << canvasBuffer[j * canvas_width + i].y << " "
+                << canvasBuffer[j * canvas_width + i].z << "\n";
+
+        }
+    }
+     ofs.close();
+    delete [] canvasBuffer;
     return 0;
 }

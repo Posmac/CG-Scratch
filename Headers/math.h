@@ -2,6 +2,7 @@
 #define CUSTOM_MATH
 
 #include <cmath>
+#include <ostream>
 
 namespace cgm //Computer Graphics Mathematics
 {
