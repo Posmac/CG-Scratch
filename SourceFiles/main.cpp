@@ -105,10 +105,6 @@ void PutPixel(float x, float y, cgm::Vector3f color)
     canvasBuffer[number-1].x  = color.x;
     canvasBuffer[number-1].y  = color.y;
     canvasBuffer[number-1].z  = color.z;
-    /*std::cout << canvasBuffer[b * canvas_height + a].x << "  "
-              << canvasBuffer[b * canvas_height + a].y << "  "
-              << canvasBuffer[b * canvas_height + a].z << std::endl;*/
-    //std::cout << x << " " << y << "  " << x * canvas_width + y << std::endl;
 }
 
 int main()
@@ -134,10 +130,11 @@ int main()
             ofs << canvasBuffer[j * canvas_width + i].x << " "
                 << canvasBuffer[j * canvas_width + i].y << " "
                 << canvasBuffer[j * canvas_width + i].z << "\n";
-
         }
     }
-     ofs.close();
+    ofs.close();
+
+
     delete [] canvasBuffer;
     return 0;
 }
