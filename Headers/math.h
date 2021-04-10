@@ -25,14 +25,14 @@ namespace cgm //Computer Graphics Mathematics
             return *this;
         }
 
-        Vector3 &operator + (const Vector3<T> &v)
+        Vector3 operator + (const Vector3<T> &v)
         {
-            x += v.x, y += v.y, z += v.z; return *this;
+            return Vector3(x + v.x, y + v.y, z + v.z);
         }
 
-        Vector3 &operator - (const Vector3<T> &v)
+        Vector3 operator - (const Vector3<T> &v)
         {
-            x -= v.x, y -= v.y, z-=v.z; return *this;
+            return Vector3(x - v.x, y - v.y, z - v.z);
         }
 
         Vector3 &operator / (const T &v)

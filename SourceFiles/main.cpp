@@ -19,23 +19,25 @@ public:
 //Scene setup
 float viewPortSize = 1.0f;
 float projectionPlaneDistance = 1.0f;
-cgm::Vector3f cameraPosition (0.0f);
+cgm::Vector3f cameraPosition (0.0f, 0.0f, 0.0f);
 cgm::Vector3f backGroundColor (255.0f);
-const int canvas_width = 1024;
-const int canvas_height = 1024;
+const int canvas_width = 2560;
+const int canvas_height = 2560;
 
  RT::Sphere spheres[3] = { RT::Sphere(cgm::Vector3f(0.0f, -1.0f, 3.0f), cgm::Vector3f(255.0f, 0.0f, 0.0f), 1.0f),
-                              RT::Sphere(cgm::Vector3f(2.0f,  1.0f, 4.0f), cgm::Vector3f(0.0f,  255.0f, 0.0f), 1.0f),
-                              RT::Sphere(cgm::Vector3f(-2.0f,  1.0f, 4.0f), cgm::Vector3f(0.0f, 0.0f, 255.0f), 1.0f)};
+                              RT::Sphere(cgm::Vector3f(-2.0f,  0.0f, 4.0f), cgm::Vector3f(0.0f,  255.0f, 0.0f), 1.0f),
+                              RT::Sphere(cgm::Vector3f(2.0f,  0.0f, 4.0f), cgm::Vector3f(0.0f, 0.0f, 255.0f), 1.0f)};
 cgm::Vector3<float> *canvasBuffer = new cgm::Vector3<float>[canvas_height * canvas_width];
 
 
 //Utility fucntions
 cgm::Vector3f CanvasToViewPort(const cgm::Vector3f &p)
 {
-    return cgm::Vector3f(p.x * viewPortSize / canvas_width,
-                         p.y * viewPortSize / canvas_height,
+    cgm::Vector3f result = cgm::Vector3f(p.x * (float)viewPortSize / canvas_width,
+                         p.y * (float)viewPortSize / canvas_height,
                          projectionPlaneDistance);
+                         //std::cout << result << "\n";
+    return result;
 }
 
 
@@ -44,6 +46,7 @@ QuadraticEcuaqionCoefficients IntersectRaySphere(cgm::Vector3f &origin, cgm::Vec
 {
     cgm::Vector3f OC = (origin - sphere.Position);
 
+    //std::cout << OC <<  "  " << origin << " " << sphere.Position <<  "\n";
     //return struct for 2 coefficients
     QuadraticEcuaqionCoefficients k;
 
@@ -54,6 +57,7 @@ QuadraticEcuaqionCoefficients IntersectRaySphere(cgm::Vector3f &origin, cgm::Vec
 
     //solving it
     float discriminant = b*b - 4*a*c;
+    //<< " " << a << " " << b << " " << c << " " << discriminant << "\n";
     if(discriminant < 0)
     {
        k.t1 = LONG_MAX;
@@ -74,7 +78,7 @@ cgm::Vector3f TraceRay(cgm::Vector3f origin , cgm::Vector3f direction, const flo
     float closest_t = LONG_MAX;
     RT::Sphere closestSphere;
 
-    for(uint32_t i = 0; i < 3; i++)
+    for(int i = 0; i < 3; i++)
     {
         QuadraticEcuaqionCoefficients coeff = IntersectRaySphere(origin, direction, spheres[i]);
         if(coeff.t1 < closest_t && min_t < coeff.t1 && coeff.t1 < max_t)
@@ -109,12 +113,13 @@ void PutPixel(float x, float y, cgm::Vector3f color)
 
 int main()
 {
+    //std::cout << spheres[0].Color <<"\n" << spheres[1].Color <<  "\n" << spheres[2].Color << "\n";
     //main loop
     for(int i = -canvas_width/2; i < canvas_width/2; i++)
     {
         for(int j = -canvas_height/2; j < canvas_height/2; j++)
         {
-            cgm::Vector3f direction = CanvasToViewPort(cgm::Vector3f( (float)i, (float)j, 0.0f));
+            cgm::Vector3f direction = CanvasToViewPort(cgm::Vector3f( i, j, 0.0f));
             cgm::Vector3f color = TraceRay(cameraPosition, direction, 1, LONG_MAX);
             PutPixel(i,j,color);
         }
