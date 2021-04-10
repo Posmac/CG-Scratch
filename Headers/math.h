@@ -53,6 +53,14 @@ namespace cgm //Computer Graphics Mathematics
             x /= v, y /= v, z /= v; return *this;
         }
 
+        Vector3 operator * (const Vector3 &v)
+        {
+            return Vector3(x * v.x, y * v.y, z * v.z);
+        }
+
+
+
+
         friend std::ostream& operator << (std::ostream &s, const Vector3<T> &v)
         {
             return s << "[" << v.x << " " << v.y << " " << v.z << "]";
