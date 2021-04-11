@@ -58,8 +58,10 @@ namespace cgm //Computer Graphics Mathematics
             return Vector3(x * v.x, y * v.y, z * v.z);
         }
 
-
-
+        bool operator != (const Vector3 &v)
+        {
+            return (x != v.x) && (y!= v.x) && (z != v.z);
+        }
 
         friend std::ostream& operator << (std::ostream &s, const Vector3<T> &v)
         {

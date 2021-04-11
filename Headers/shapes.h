@@ -11,7 +11,7 @@ namespace RT
         cgm::Vector3f Color; //white by default
         float radius; //1 by default
         float shininess;//1 by default
-        //public constructors
+
         Sphere() : Position(cgm::Vector3f(0.0f)), Color(cgm::Vector3f(255.0f)), radius(.0f), shininess(1.0f) {}
         Sphere(const cgm::Vector3f &p, const cgm::Vector3f &c, float r, float s)
             : Position(p), Color(c), radius(r), shininess(s) {}

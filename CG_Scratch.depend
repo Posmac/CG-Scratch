@@ -7,11 +7,12 @@
 	"math.h"
 	"Shapes.h"
 
-1618074821 source:d:\education\c c++\cg-scratch\sourcefiles\main.cpp
+1618141476 source:d:\education\c c++\cg-scratch\sourcefiles\main.cpp
 	<iostream>
 	<fstream>
 	<istream>
 	<iostream>
+	<string>
 	"math.h"
 	"Shapes.h"
 
