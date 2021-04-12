@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-../Headers/math.h
+../Headers/custom_math.h
 cmath
 -
 ostream
@@ -14,7 +14,7 @@ ostream
 
 ../Headers/shapes.h
 
-D:/Education/C C++/CG-Scratch/SourceFiles/main.cpp
+C:/Own/CG_Scratch/SourceFiles/main.cpp
 iostream
 -
 fstream
@@ -25,8 +25,8 @@ iostream
 -
 string
 -
-math.h
-D:/Education/C C++/CG-Scratch/SourceFiles/math.h
-Headers/shapes.h
-D:/Education/C C++/CG-Scratch/SourceFiles/Headers/shapes.h
+custom_math.h
+C:/Own/CG_Scratch/SourceFiles/custom_math.h
+shapes.h
+C:/Own/CG_Scratch/SourceFiles/shapes.h
 

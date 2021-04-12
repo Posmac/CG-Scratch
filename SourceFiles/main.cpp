@@ -3,9 +3,8 @@
 #include <istream>
 #include <iostream>
 #include <string>
-#include "math.h"
+#include "custom_math.h"
 #include "shapes.h"
-//#include "Headers/shapes.h"
 
 struct QuadraticEquationCoefficients
 {

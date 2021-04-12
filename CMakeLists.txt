@@ -10,8 +10,8 @@ include_directories(ImportedImages)
 
 add_executable(CG_Scratch
         GeneratedImages/output.ppm
-        Headers/math.h
+        Headers/custom_math.h
         Headers/shapes.h
         ImportedImages/output.ppm
         SourceFiles/main.cpp
-        Shapes.h)
+        )
