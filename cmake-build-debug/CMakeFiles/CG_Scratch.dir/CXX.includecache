@@ -6,27 +6,7 @@
 
 #IncludeRegexTransform: 
 
-../Headers/custom_math.h
-cmath
--
-ostream
--
-
-../Headers/shapes.h
-
 C:/Own/CG_Scratch/SourceFiles/main.cpp
 iostream
 -
-fstream
--
-istream
--
-iostream
--
-string
--
-custom_math.h
-C:/Own/CG_Scratch/SourceFiles/custom_math.h
-shapes.h
-C:/Own/CG_Scratch/SourceFiles/shapes.h
 

@@ -28,6 +28,7 @@
 					<Add directory="C:/Own/CG_Scratch/Headers"/>
 					<Add directory="C:/Own/CG_Scratch/SourceFiles"/>
 					<Add directory="C:/Own/CG_Scratch/ImportedImages"/>
+					<Add directory="C:/Own/CG_Scratch/Headers/glm"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\ATLMFC\include"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\include"/>
 					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
@@ -55,6 +56,7 @@
 					<Add directory="C:/Own/CG_Scratch/Headers"/>
 					<Add directory="C:/Own/CG_Scratch/SourceFiles"/>
 					<Add directory="C:/Own/CG_Scratch/ImportedImages"/>
+					<Add directory="C:/Own/CG_Scratch/Headers/glm"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\ATLMFC\include"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\include"/>
 					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>

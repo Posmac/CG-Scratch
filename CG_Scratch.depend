@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1617982770 source:c:\own\cg_scratch\sourcefiles\main.cpp
+1618213832 source:c:\own\cg_scratch\sourcefiles\main.cpp
 	<iostream>
 	<fstream>
 	<istream>
 	<iostream>
-	"math.h"
-	"Shapes.h"
+	<string>
+	"custom_math.h"
+	"shapes.h"
 
 1618141541 source:d:\education\c c++\cg-scratch\sourcefiles\main.cpp
 	<iostream>

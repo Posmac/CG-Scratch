@@ -6,5 +6,5 @@ CXX_FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++14
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -IC:\Own\CG_Scratch\. -IC:\Own\CG_Scratch\Headers -IC:\Own\CG_Scratch\SourceFiles -IC:\Own\CG_Scratch\ImportedImages 
+CXX_INCLUDES = -IC:\Own\CG_Scratch\. -IC:\Own\CG_Scratch\Headers -IC:\Own\CG_Scratch\SourceFiles -IC:\Own\CG_Scratch\ImportedImages -IC:\Own\CG_Scratch\Headers\glm 
 
