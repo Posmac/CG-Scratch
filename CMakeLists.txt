@@ -12,7 +12,7 @@ include_directories(Headers/glm)
 add_executable(CG_Scratch
         GeneratedImages/output.ppm
         Headers/custom_math.h
-        Headers/shapes.h
+        Headers/Sphere.h
         ImportedImages/output.ppm
         SourceFiles/main.cpp
-        )
+        Headers/Light.h)
