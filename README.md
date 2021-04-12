@@ -1,5 +1,8 @@
 # CG-Scratch
 There i will develop RayTracer and Resterizer from scratch using C++, without any graphics API: OpenGL, DX, Vulkan and so on.
+
+Used materials: Gabriel Gambetta book "Computer Graphics from Scratch" https://www.gabrielgambetta.com/computer-graphics-from-scratch/
+
 MY PLAN:
 
 1) Math                                                                                          
