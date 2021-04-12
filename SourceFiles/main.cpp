@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 #include "math.h"
-#include "Headers/shapes.h"
+#include "shapes.h"
+//#include "Headers/shapes.h"
 
 struct QuadraticEquationCoefficients
 {
@@ -135,7 +136,7 @@ int main()
             cgm::Vector3f direction = CanvasToViewPort(cgm::Vector3f( i, j, 0.0f));
             cgm::Vector3f color = TraceRay(cameraPosition, direction, 1, LONG_MAX);
             //std::cout << color << "\n";
-            color = ClampColor(color);
+            //color = ClampColor(color);
             PutPixel(i,j, color);
         }
     }
