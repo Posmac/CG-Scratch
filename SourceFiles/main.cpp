@@ -6,13 +6,13 @@
 #include "math.h"
 #include "Headers/shapes.h"
 
-struct QuadraticEcuaqionCoefficients
+struct QuadraticEquationCoefficients
 {
 public:
     float t1;
     float t2;
-    QuadraticEcuaqionCoefficients(): t1(0), t2(0) {};
-    ~QuadraticEcuaqionCoefficients() {};
+    QuadraticEquationCoefficients(): t1(0), t2(0) {};
+    ~QuadraticEquationCoefficients() {};
 };
 
 
@@ -39,53 +39,8 @@ RT::LightSource lightSources[sourceLightCount] = {
                                  };
 
 cgm::Vector3<float> *canvasBuffer = new cgm::Vector3<float>[canvas_height * canvas_width];
-float *depthBuffer = new float[canvas_height * canvas_width];
 
 //Utility fucntions
-float ComputeLighting(cgm::Vector3f &point, cgm::Vector3f &normal, float specular, cgm::Vector3f view)
-{
-    float intensity = 0.0f;
-    for(int i = 0; i < sourceLightCount; i++)
-    {
-        RT::LightSource source = lightSources[i];
-        if(source.Type == RT::AMBIENT)
-            intensity += source.Intensity;
-        else
-        {
-            cgm::Vector3f lightDir;
-            if(source.Type == RT::DIRECTIONAL)
-            {
-                lightDir = source.Direction;
-            }
-            else if(source.Type == RT::POINT)
-            {
-                lightDir = point - source.Position;
-            }
-
-            normal.normalize();
-            lightDir.normalize();
-
-            float dp = normal.dot(lightDir);
-
-            if(dp > 0)
-                intensity += source.Intensity * dp;
-
-            /*if(specular != -1)
-            {
-                cgm::Vector3f reflVector = normal * 2.0f * normal.dot(view) - lightDir;
-                //std::cout << reflVector << "\n";
-                reflVector.normalize();
-                view.normalize();
-                float rdp = reflVector.dot(view);
-                if(rdp > 0)
-                    intensity += source.Intensity * pow(rdp, specular);
-            }*/
-        }
-    }
-    return intensity;
-}
-
-
 cgm::Vector3f CanvasToViewPort(const cgm::Vector3f &p)
 {
     cgm::Vector3f result = cgm::Vector3f(p.x * (float)viewPortSize / canvas_width,
@@ -96,12 +51,12 @@ cgm::Vector3f CanvasToViewPort(const cgm::Vector3f &p)
 
 
 
-QuadraticEcuaqionCoefficients IntersectRaySphere(cgm::Vector3f &origin, cgm::Vector3f &direction, RT::Sphere &sphere)
+QuadraticEquationCoefficients IntersectRaySphere(cgm::Vector3f &origin, cgm::Vector3f &direction, RT::Sphere &sphere)
 {
     cgm::Vector3f OC = (origin - sphere.Position);
 
     //return struct for 2 coefficients
-    QuadraticEcuaqionCoefficients k;
+    QuadraticEquationCoefficients k;
 
     //coefficients for a^2 + 2*b + c = 0 equation
     float a = direction.dot(direction);
@@ -133,7 +88,7 @@ cgm::Vector3f TraceRay(cgm::Vector3f origin , cgm::Vector3f direction, const flo
 
     for(int i = 0; i < spheresCount; i++)
     {
-        QuadraticEcuaqionCoefficients coeff = IntersectRaySphere(origin, direction, spheres[i]);
+        QuadraticEquationCoefficients coeff = IntersectRaySphere(origin, direction, spheres[i]);
         if(coeff.t1 < closest_t && min_t < coeff.t1 && coeff.t1 < max_t)
         {
             closest_t = coeff.t1;
@@ -147,13 +102,7 @@ cgm::Vector3f TraceRay(cgm::Vector3f origin , cgm::Vector3f direction, const flo
     }
     if(closestSphere.radius == 0)
             return backGroundColor;
-
-    cgm::Vector3f point = origin + (direction * closest_t);
-    cgm::Vector3f normal = (point - closestSphere.Position);
-
-    cgm::Vector3f view = direction * -1.0f;
-
-    return closestSphere.Color *  ComputeLighting(point, normal, closestSphere.shininess , view);
+    return closestSphere.Color;
 }
 
 void PutPixel(float x, float y, cgm::Vector3f color)
@@ -178,12 +127,6 @@ cgm::Vector3f ClampColor(cgm::Vector3f &c)
 }
 int main()
 {
-    //set all pixels value to INFINITY ( LONG_MAX)
-    /*for(int i = 0; i < canvas_width * canvas_width; i++)
-    {
-        depthBuffer[i] = LONG_MAX;
-    }*/
-
     //main loop
     for(int i = -canvas_width/2; i < canvas_width/2; i++)
     {
