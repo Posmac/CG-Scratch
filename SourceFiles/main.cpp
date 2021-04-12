@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include "math.h"
-#include "Shapes.h"
+#include "Headers/shapes.h"
 
 struct QuadraticEcuaqionCoefficients
 {
@@ -26,7 +26,7 @@ const int canvas_height = 512;
 const int spheresCount = 4;
 const int sourceLightCount = 3;
 
- RT::Sphere spheres[spheresCount] = {
+RT::Sphere spheres[spheresCount] = {
                             RT::Sphere(cgm::Vector3f(0.0f, -5001.0f, 0.0f), cgm::Vector3f(255.0f, 0.0f, 255.0f), 5000.0f, 1000.0f),
                             RT::Sphere(cgm::Vector3f(0.0f,  -0.5f, 3.0f), cgm::Vector3f(255.0f, 0.0f, 0.0f), 1.0f, 500.0f),
                             RT::Sphere(cgm::Vector3f(-2.0f,  0.0f, 4.0f), cgm::Vector3f(0.0f,  255.0f, 0.0f), 1.0f, 10.0f),
@@ -210,6 +210,8 @@ int main()
         }
     }
     ofs.close();
+
+    std::cout << "DONE" << "\n";
 
 
     delete [] canvasBuffer;

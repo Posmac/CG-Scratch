@@ -1,8 +1,6 @@
 #pragma once
 namespace RT
 {
-
-
     struct Sphere
     {
     public:

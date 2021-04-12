@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../Headers/math.h
+cmath
+-
+ostream
+-
+
+../Headers/shapes.h
+
+D:/Education/C C++/CG-Scratch/SourceFiles/main.cpp
+iostream
+-
+fstream
+-
+istream
+-
+iostream
+-
+string
+-
+math.h
+D:/Education/C C++/CG-Scratch/SourceFiles/math.h
+Headers/shapes.h
+D:/Education/C C++/CG-Scratch/SourceFiles/Headers/shapes.h
+
