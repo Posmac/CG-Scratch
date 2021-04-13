@@ -199,9 +199,7 @@ namespace cgm
 
         //constructors
         Matrix4x4() {};
-
     };
-
 
 #endif // CUSTOM_MATH
 
