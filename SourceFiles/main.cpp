@@ -5,8 +5,8 @@
 #include "Sphere.h"
 #include "Light.h"
 
-#define CANVAS_W 512
-#define CANVAS_H 512
+#define CANVAS_W 1024
+#define CANVAS_H 1024
 
 int viewPortSize = 1;
 int projectionPlane = 1;
@@ -45,7 +45,7 @@ cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere 
     float b = 2.0f * OC.dot(direction);
     float c = OC.dot(OC) - pow(sphere.radius, 2.0f);
 
-    float discriminant = b*b - 4*a*c;
+    float discriminant = b * b - 4 * a * c;
     if(discriminant < 0)
         return cgm::vec2f(std::numeric_limits<float>::infinity());
 
@@ -73,18 +73,22 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
 
            lDir = lDir.normalize();
            normal = normal.normalize();
+
            float dp = normal.dot(lDir);
            if(dp > 0)
                intensity += light.intensity * dp;
 
            if(specular != -1)
            {
-               cgm::vec3f reflVec = 2.0f * normal.dot(lDir) * normal - lDir;
-               //reflVec = reflVec.normalize();
-               //view = view.normalize();
+               cgm::vec3f reflVec = (2.0f * normal.dot(lDir)) * normal - lDir;
+
+               reflVec = reflVec.normalize();
+               view = view.normalize();
+
                float rp = reflVec.dot(view);
                if(rp > 0)
-                   intensity += light.intensity * pow(rp / (view.length() * reflVec.length()), specular);
+                   intensity += light.intensity * pow(rp, specular);
+
            }
        }
     }
@@ -116,7 +120,7 @@ cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float 
     cgm::vec3f point = origin + closest_t * direction;
     cgm::vec3f normal = point - closestSphere.center;
 
-    cgm::vec3f view = direction * -1.0f;
+    cgm::vec3f view = -1.0 * direction;
 
     return closestSphere.color * ComputeLighting(point, normal, view, closestSphere.specular);
 }
@@ -133,7 +137,15 @@ void PutPixel(int x, int y,cgm::vec3f color)
     canvasBuffer[number].y  = color.y;
     canvasBuffer[number].z  = color.z;
 }
-
+cgm::vec3f ClampColor(cgm::vec3f color)
+{
+    return
+    {
+        std::min(255.0f, std::max(0.0f, color.x)),
+        std::min(255.0f, std::max(0.0f, color.y)),
+        std::min(255.0f, std::max(0.0f, color.z))
+    };
+}
 int main()
 {
     for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
@@ -142,6 +154,7 @@ int main()
         {
             cgm::vec3f direction = CanvasToViewPort(x,y);
             cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity());
+            color = ClampColor(color);
             PutPixel(x,y, color);
         }
     }
@@ -149,17 +162,18 @@ int main()
     std::ofstream ofs;
     ofs.open("./output.ppm");
     ofs << "P3\n" << CANVAS_W << " " << CANVAS_H << "\n255\n";
+
     for(int x = 0; x < CANVAS_W; x++)
     {
         for(int y = 0; y < CANVAS_H; y ++)
         {
-            ofs << canvasBuffer[x * CANVAS_W + y].x << " "
-                << canvasBuffer[x * CANVAS_W + y].y << " "
-                << canvasBuffer[x * CANVAS_W + y].z << "\n";
+            ofs << canvasBuffer[y * CANVAS_W + x].x << " "
+                << canvasBuffer[y * CANVAS_W + x].y << " "
+                << canvasBuffer[y * CANVAS_W + x].z << "\n";
         }
     }
-    ofs.close();
 
+    ofs.close();
     std::cout << "DONE" << "\n";
     return 0;
 }
