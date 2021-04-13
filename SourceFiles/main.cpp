@@ -30,6 +30,13 @@ Light lights[lightCount] = {
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
+struct Intersection
+{
+    Sphere *sphere;
+    float closest_t;
+};
+
+
 cgm::vec3f CanvasToViewPort(int x,int y)
 {
     return cgm::vec3f( x * viewPortSize/(float) CANVAS_W,
@@ -54,6 +61,36 @@ cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere 
 
 }
 
+Intersection* ClosestIntersection(cgm::vec3f &origin, cgm::vec3f  direction,float min_t, float max_t)
+{
+    float closest_t = std::numeric_limits<float>::infinity();
+    Sphere *closestSphere = NULL;
+    Intersection *intersection = NULL;
+
+    for(int i = 0; i < spheresCount; i++)
+    {
+        cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
+        if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
+        {
+            closest_t = ts.x;
+            closestSphere = &spheres[i];
+        }
+        if(ts.y < closest_t && min_t < ts.y && ts.y < max_t)
+        {
+            closest_t = ts.y;
+            closestSphere = &spheres[i];
+        }
+    }
+
+    if(closestSphere != NULL)
+    {
+        intersection = new Intersection{ closestSphere, closest_t };
+        return intersection;
+    }
+
+    return NULL;
+}
+
 cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view, float specular)
 {
     float intensity = 0.0f;
@@ -66,10 +103,22 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
        else
        {
            cgm::vec3f lDir;
+           float t_max;
+
            if(light.Type == POINT)
-                lDir = light.position - point;
+           {
+               lDir = light.position - point;
+                t_max = 1.0f;
+           }
            if(light.Type == DIRECTIONAL)
+           {
                lDir = light.direction;
+                t_max = std::numeric_limits<float>::infinity();
+           }
+
+           Intersection* blocker = ClosestIntersection(point, lDir, 0.01f, t_max);
+           if(blocker)
+               continue;
 
            lDir = lDir.normalize();
            normal = normal.normalize();
@@ -95,34 +144,23 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
     return intensity;
 }
 
+
 cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t)
 {
-    float closest_t = std::numeric_limits<float>::infinity();
-    Sphere closestSphere;
-
-    for(int i = 0; i < spheresCount; i++)
-    {
-        cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
-        if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
-        {
-            closest_t = ts.x;
-            closestSphere = spheres[i];
-        }
-        if(ts.y < closest_t && min_t < ts.y && ts.y < max_t)
-        {
-            closest_t = ts.y;
-            closestSphere = spheres[i];
-        }
-    }
-    if(closestSphere.radius == 0)
+    Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
+    //std::cout << (intersection==NULL) << "\n";
+    if(intersection == NULL)
         return backGroundColor;
 
+    float closest_t = intersection->closest_t;
+    Sphere *closestSphere = intersection->sphere;
+
     cgm::vec3f point = origin + closest_t * direction;
-    cgm::vec3f normal = point - closestSphere.center;
+    cgm::vec3f normal = point - closestSphere->center;
 
     cgm::vec3f view = -1.0 * direction;
 
-    return closestSphere.color * ComputeLighting(point, normal, view, closestSphere.specular);
+    return closestSphere->color * ComputeLighting(point, normal, view, closestSphere->specular);
 }
 
 void PutPixel(int x, int y,cgm::vec3f color)
