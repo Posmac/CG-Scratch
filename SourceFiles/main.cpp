@@ -1,163 +1,179 @@
+#include <limits>
 #include <iostream>
 #include <fstream>
-#include <istream>
-#include <iostream>
-#include <string>
-#include "math.h"
-#include "shapes.h"
-//#include "Headers/shapes.h"
+#include "custom_math.h"
+#include "Sphere.h"
+#include "Light.h"
 
-struct QuadraticEquationCoefficients
-{
-public:
-    float t1;
-    float t2;
-    QuadraticEquationCoefficients(): t1(0), t2(0) {};
-    ~QuadraticEquationCoefficients() {};
+#define CANVAS_W 1024
+#define CANVAS_H 1024
+
+int viewPortSize = 1;
+int projectionPlane = 1;
+cgm::vec3f cameraPosition(0.0f, 0.0f, 0.0f);
+cgm::vec3f backGroundColor(255.0f);
+const int spheresCount = 4;
+const int lightCount = 3;
+
+Sphere spheres[spheresCount] = {
+        Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f), cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500),
+        Sphere(cgm::vec3f(2.0f,  0.0f, 4.0f), cgm::vec3f(0.0f,   0.0f, 255.0f), 1.0f, 500),
+        Sphere(cgm::vec3f(-2.0f, 0.0f, 4.0f), cgm::vec3f(0.0f, 255.0f, 0.0f), 1.0f, 10),
+        Sphere(cgm::vec3f(0.0f, -5001.0f, 0.0f), cgm::vec3f(255.0f, 255.0f, 0.0f), 5000.0f, 1000),
 };
 
+Light lights[lightCount] = {
+        Light(cgm::vec3f(), cgm::vec3f(), 0.2f, AMBIENT),
+        Light(cgm::vec3f(2.0f, 1.0f, 0.0f), cgm::vec3f(), 0.6f, POINT),
+        Light(cgm::vec3f(), cgm::vec3f(1.0f, 4.0f, 4.0f), 0.2f, DIRECTIONAL)
+};
 
-//Scene setup
-float viewPortSize = 1.0f;
-float projectionPlaneDistance = 1.0f;
-cgm::Vector3f cameraPosition (0.0f, 0.0f, 0.0f);
-cgm::Vector3f backGroundColor (255.0f);
-const int canvas_width = 512;
-const int canvas_height = 512;
-const int spheresCount = 4;
-const int sourceLightCount = 3;
+cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
-RT::Sphere spheres[spheresCount] = {
-                            RT::Sphere(cgm::Vector3f(0.0f, -5001.0f, 0.0f), cgm::Vector3f(255.0f, 0.0f, 255.0f), 5000.0f, 1000.0f),
-                            RT::Sphere(cgm::Vector3f(0.0f,  -0.5f, 3.0f), cgm::Vector3f(255.0f, 0.0f, 0.0f), 1.0f, 500.0f),
-                            RT::Sphere(cgm::Vector3f(-2.0f,  0.0f, 4.0f), cgm::Vector3f(0.0f,  255.0f, 0.0f), 1.0f, 10.0f),
-                            RT::Sphere(cgm::Vector3f(2.0f,  0.0f, 4.0f), cgm::Vector3f(0.0f, 0.0f, 255.0f), 1.0f, 150.0f)
-                                    };
-RT::LightSource lightSources[sourceLightCount] = {
-                                   RT::LightSource(cgm::Vector3f(0.0f), cgm::Vector3f(0.0f), 0.2f, RT::AMBIENT),
-                                   RT::LightSource(cgm::Vector3f(2.0f, 1.0f, 0.0f), cgm::Vector3f(0.0f), 1.6f, RT::POINT),
-                                   RT::LightSource(cgm::Vector3f(0.0f), cgm::Vector3f(1.0f, 4.0f, 4.0f), 0.2f, RT::DIRECTIONAL)
-                                 };
-
-cgm::Vector3<float> *canvasBuffer = new cgm::Vector3<float>[canvas_height * canvas_width];
-
-//Utility fucntions
-cgm::Vector3f CanvasToViewPort(const cgm::Vector3f &p)
+cgm::vec3f CanvasToViewPort(int x,int y)
 {
-    cgm::Vector3f result = cgm::Vector3f(p.x * (float)viewPortSize / canvas_width,
-                                         p.y * (float)viewPortSize / canvas_height,
-                                         projectionPlaneDistance);
-    return result;
+    return cgm::vec3f( x * viewPortSize/(float) CANVAS_W,
+                       y * viewPortSize/(float) CANVAS_H,
+                       projectionPlane);
 }
 
-
-
-QuadraticEquationCoefficients IntersectRaySphere(cgm::Vector3f &origin, cgm::Vector3f &direction, RT::Sphere &sphere)
+cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere &sphere)
 {
-    cgm::Vector3f OC = (origin - sphere.Position);
+    cgm::vec3f OC = origin - sphere.center;
 
-    //return struct for 2 coefficients
-    QuadraticEquationCoefficients k;
-
-    //coefficients for a^2 + 2*b + c = 0 equation
     float a = direction.dot(direction);
-    float b = 2 * OC.dot(direction);
-    float c = OC.dot(OC) - sphere.radius * sphere.radius;
+    float b = 2.0f * OC.dot(direction);
+    float c = OC.dot(OC) - pow(sphere.radius, 2.0f);
 
-    //solving it
-    float discriminant = b*b - 4*a*c;
-
+    float discriminant = b * b - 4 * a * c;
     if(discriminant < 0)
-    {
-       k.t1 = LONG_MAX;
-       k.t2 = k.t1;
-       return k;
-    }
+        return cgm::vec2f(std::numeric_limits<float>::infinity());
 
-    //finding coefficients
-    float t1 = (-b + sqrt(discriminant) / (2*a));
-    float t2 = (-b - sqrt(discriminant) / (2*a));
-    k.t1 = t1;
-    k.t2 = t2;
-    return k;
+    return cgm::vec2f ( (-b + sqrt(discriminant)) / (2 * a),
+                        (-b - sqrt(discriminant)) / (2 * a));
+
 }
 
-cgm::Vector3f TraceRay(cgm::Vector3f origin , cgm::Vector3f direction, const float min_t, const float max_t)
+cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view, float specular)
 {
-    float closest_t = LONG_MAX;
-    RT::Sphere closestSphere;
+    float intensity = 0.0f;
+
+    for(int i = 0 ; i < spheresCount; i++)
+    {
+       Light light = lights[i];
+       if(light.Type == AMBIENT)
+           intensity += light.intensity;
+       else
+       {
+           cgm::vec3f lDir;
+           if(light.Type == POINT)
+                lDir = light.position - point;
+           if(light.Type == DIRECTIONAL)
+               lDir = light.direction;
+
+           lDir = lDir.normalize();
+           normal = normal.normalize();
+
+           float dp = normal.dot(lDir);
+           if(dp > 0)
+               intensity += light.intensity * dp;
+
+           if(specular != -1)
+           {
+               cgm::vec3f reflVec = (2.0f * normal.dot(lDir)) * normal - lDir;
+
+               reflVec = reflVec.normalize();
+               view = view.normalize();
+
+               float rp = reflVec.dot(view);
+               if(rp > 0)
+                   intensity += light.intensity * pow(rp, specular);
+
+           }
+       }
+    }
+    return intensity;
+}
+
+cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t)
+{
+    float closest_t = std::numeric_limits<float>::infinity();
+    Sphere closestSphere;
 
     for(int i = 0; i < spheresCount; i++)
     {
-        QuadraticEquationCoefficients coeff = IntersectRaySphere(origin, direction, spheres[i]);
-        if(coeff.t1 < closest_t && min_t < coeff.t1 && coeff.t1 < max_t)
+        cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
+        if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
         {
-            closest_t = coeff.t1;
+            closest_t = ts.x;
             closestSphere = spheres[i];
         }
-        if(coeff.t2 < closest_t && min_t < coeff.t2 && coeff.t2 < max_t)
+        if(ts.y < closest_t && min_t < ts.y && ts.y < max_t)
         {
-            closest_t = coeff.t1;
+            closest_t = ts.y;
             closestSphere = spheres[i];
         }
     }
     if(closestSphere.radius == 0)
-            return backGroundColor;
-    return closestSphere.Color;
+        return backGroundColor;
+
+    cgm::vec3f point = origin + closest_t * direction;
+    cgm::vec3f normal = point - closestSphere.center;
+
+    cgm::vec3f view = -1.0 * direction;
+
+    return closestSphere.color * ComputeLighting(point, normal, view, closestSphere.specular);
 }
 
-void PutPixel(float x, float y, cgm::Vector3f color)
+void PutPixel(int x, int y,cgm::vec3f color)
 {
-    x = canvas_width/2 + x;
-    y = canvas_height/2 - y;
+    x = CANVAS_W/2 + x;
+    y = CANVAS_H/2 - y - 1;
 
-    if(x < 0 || x > canvas_width || y < 0 || y > canvas_height)
+    if(x < 0 || x >= CANVAS_W || y < 0 || y > CANVAS_H)
         return;
-
-    int number = x * canvas_width + y;
-    canvasBuffer[number-1].x  = color.x;
-    canvasBuffer[number-1].y  = color.y;
-    canvasBuffer[number-1].z  = color.z;
+    int number = x * CANVAS_W + y;
+    canvasBuffer[number].x  = color.x;
+    canvasBuffer[number].y  = color.y;
+    canvasBuffer[number].z  = color.z;
 }
-cgm::Vector3f ClampColor(cgm::Vector3f &c)
+cgm::vec3f ClampColor(cgm::vec3f color)
 {
-    //int ir = static_cast<int>(255.999 * c.x/255.0f);
-    //int ig = static_cast<int>(255.999 * c.y/255.0f);
-    //int ib = static_cast<int>(255.999 * c.z/255.0f);
-    return cgm::Vector3f(c.x,c.y,c.z);
+    return
+    {
+        std::min(255.0f, std::max(0.0f, color.x)),
+        std::min(255.0f, std::max(0.0f, color.y)),
+        std::min(255.0f, std::max(0.0f, color.z))
+    };
 }
 int main()
 {
-    //main loop
-    for(int i = -canvas_width/2; i < canvas_width/2; i++)
+    for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
     {
-        for(int j = -canvas_height/2; j < canvas_height/2; j++)
+        for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
         {
-            cgm::Vector3f direction = CanvasToViewPort(cgm::Vector3f( i, j, 0.0f));
-            cgm::Vector3f color = TraceRay(cameraPosition, direction, 1, LONG_MAX);
-            //std::cout << color << "\n";
-            //color = ClampColor(color);
-            PutPixel(i,j, color);
+            cgm::vec3f direction = CanvasToViewPort(x,y);
+            cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity());
+            color = ClampColor(color);
+            PutPixel(x,y, color);
         }
     }
 
     std::ofstream ofs;
     ofs.open("./output.ppm");
-    ofs << "P3\n" << canvas_width << " " << canvas_height << "\n255\n";
-    for(int i = 0; i < canvas_height; i++)
+    ofs << "P3\n" << CANVAS_W << " " << CANVAS_H << "\n255\n";
+
+    for(int x = 0; x < CANVAS_W; x++)
     {
-        for(int j = 0; j < canvas_width; j ++)
+        for(int y = 0; y < CANVAS_H; y ++)
         {
-            ofs << canvasBuffer[j * canvas_width + i].x << " "
-                << canvasBuffer[j * canvas_width + i].y << " "
-                << canvasBuffer[j * canvas_width + i].z << "\n";
+            ofs << canvasBuffer[y * CANVAS_W + x].x << " "
+                << canvasBuffer[y * CANVAS_W + x].y << " "
+                << canvasBuffer[y * CANVAS_W + x].z << "\n";
         }
     }
+
     ofs.close();
-
     std::cout << "DONE" << "\n";
-
-
-    delete [] canvasBuffer;
     return 0;
 }

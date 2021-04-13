@@ -6,27 +6,29 @@
 
 #IncludeRegexTransform: 
 
-../Headers/math.h
+../Headers/Light.h
+
+../Headers/Sphere.h
+custom_math.h
+../Headers/custom_math.h
+
+../Headers/custom_math.h
 cmath
 -
 ostream
 -
 
-../Headers/shapes.h
-
 D:/Education/C C++/CG-Scratch/SourceFiles/main.cpp
+limits
+-
 iostream
 -
 fstream
 -
-istream
--
-iostream
--
-string
--
-math.h
-D:/Education/C C++/CG-Scratch/SourceFiles/math.h
-Headers/shapes.h
-D:/Education/C C++/CG-Scratch/SourceFiles/Headers/shapes.h
+custom_math.h
+D:/Education/C C++/CG-Scratch/SourceFiles/custom_math.h
+Sphere.h
+D:/Education/C C++/CG-Scratch/SourceFiles/Sphere.h
+Light.h
+D:/Education/C C++/CG-Scratch/SourceFiles/Light.h
 
