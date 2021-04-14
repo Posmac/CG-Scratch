@@ -16,7 +16,9 @@ There i will develop RayTracer and Resterizer from scratch using C++, without an
    c) Shadows and reflections - **done**                                           
    d) Camera arbitrary positioning - **done**
    
-   *TODO: Parallelization, caching immutable values, other primitives support, transparency, refraction, constructive solid geometry*                          
+   *TODO: Parallelization, caching immutable values, other primitives support, transparency, refraction, constructive solid geometry*   
+   
+   ![alt text](https://prnt.sc/11e1nd4)
    
 3) *Rasterizer*                                               
    a)Lines                             
