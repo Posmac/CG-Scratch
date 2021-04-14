@@ -5,16 +5,21 @@
 #include "Sphere.h"
 #include "Light.h"
 
-#define CANVAS_W 512
-#define CANVAS_H 512
+#define CANVAS_W 2
+#define CANVAS_H 2
 #define RECURSION_DEPTH 3
 
 int viewPortSize = 1;
 int projectionPlane = 1;
-cgm::vec3f cameraPosition(0.0f, 0.0f, 0.0f);
+cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
 cgm::vec3f backGroundColor(0.0f);
 const int spheresCount = 4;
 const int lightCount = 3;
+float rotationAngle = 60;
+cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
+                                0.0f, 1.0f, 0.0f, 0.0f,
+                                0.7071, 0.0f, 0.7071, 0.0f,
+                                0.0f, 0.0f, 0.0f, 1.0f);
 
 Sphere spheres[spheresCount] = {
         Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f), cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500, 0.2f),
@@ -203,6 +208,9 @@ int main()
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
         {
             cgm::vec3f direction = CanvasToViewPort(x,y);
+            std::cout << direction;
+            direction = cameraRotation.mulDirectionMatrix(direction);
+            std::cout << direction;
             cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity(), RECURSION_DEPTH);
             color = ClampColor(color);
             PutPixel(x,y, color);
