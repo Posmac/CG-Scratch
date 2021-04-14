@@ -36,8 +36,9 @@ Light lights[lightCount] = {
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
-struct Intersection
+class Intersection
 {
+public:
     Sphere *sphere;
     float closest_t;
 };
@@ -202,7 +203,17 @@ cgm::vec3f ClampColor(cgm::vec3f color)
 }
 int main()
 {
-    //std::cout << cameraRotation << "\n";
+    cgm::Matrix4x4f m1(2.0f,3.0f,-1.0f, 4.0f,
+                       10.0f,5.0f,-4.0f,0.0f,
+                       0.0f, -7.0f, 3.5f, 4.9f,
+                       -0.1f, 0.17f, 0.0f, -5.0f);
+    cgm::Matrix4x4f m2(0.707107, 0, -0.707107, 0, -0.331295, 0.883452, -0.331295, 0, 0.624695, 0.468521, 0.624695, 0, 4.000574,
+                       3.00043, 4.000574, 1);
+
+    cgm::Matrix4x4f m3 = m2.inverse();
+    std::cout << m2.inverse() << std::endl;
+
+
     for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
     {
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
