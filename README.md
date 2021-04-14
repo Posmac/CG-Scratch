@@ -18,8 +18,6 @@ There i will develop RayTracer and Resterizer from scratch using C++, without an
    
    *TODO: Parallelization, caching immutable values, other primitives support, transparency, refraction, constructive solid geometry*   
    
-  ![Final Raytracer](/Images/FinalRayTracer.ppm)
-   
 3) *Rasterizer*                                               
    a)Lines                             
    b)Filled Triangles                               
