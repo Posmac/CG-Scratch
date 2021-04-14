@@ -186,5 +186,20 @@ namespace cgm
     typedef vec3<int> vec3i;
     typedef vec3<unsigned char> vec3c;
 }
+
+    template<typename T>
+    class Matrix4x4
+    {
+    public:
+        //elements
+        T e[4][4] ={ {1, 0, 0, 0},
+                     {0, 1, 0, 0},
+                     {0, 0, 1, 0},
+                     {0, 0, 0, 1} };
+
+        //constructors
+        Matrix4x4() {};
+    };
+
 #endif // CUSTOM_MATH
 

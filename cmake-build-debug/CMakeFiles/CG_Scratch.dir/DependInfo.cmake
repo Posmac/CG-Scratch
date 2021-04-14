@@ -14,7 +14,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../Headers"
   "../SourceFiles"
   "../ImportedImages"
-  "../Headers/glm"
   )
 
 # Targets to which this target links.
