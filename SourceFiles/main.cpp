@@ -5,9 +5,9 @@
 #include "Sphere.h"
 #include "Light.h"
 
-#define CANVAS_W 512
-#define CANVAS_H 512
-#define RECURSION_DEPTH 3
+#define CANVAS_W 2048
+#define CANVAS_H 2048
+#define RECURSION_DEPTH 6
 
 int viewPortSize = 1;
 int projectionPlane = 1;
@@ -15,7 +15,6 @@ cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
 cgm::vec3f backGroundColor(0.0f);
 const int spheresCount = 4;
 const int lightCount = 3;
-float rotationAngle = 60;
 cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
                                 0.0f, 1.0f, 0.0f, 0.0f,
                                 0.7071, 0.0f, 0.7071, 0.0f,
