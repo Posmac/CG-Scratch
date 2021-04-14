@@ -5,8 +5,8 @@
 #include "Sphere.h"
 #include "Light.h"
 
-#define CANVAS_W 2
-#define CANVAS_H 2
+#define CANVAS_W 512
+#define CANVAS_H 512
 #define RECURSION_DEPTH 3
 
 int viewPortSize = 1;
@@ -112,7 +112,7 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
        else
        {
            cgm::vec3f lDir;
-           float t_max;
+           float t_max = 0.0f;
 
            if(light.Type == POINT)
            {
@@ -158,7 +158,6 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
 cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
 {
     Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
-    //std::cout << (intersection==NULL) << "\n";
     if(intersection == NULL)
         return backGroundColor;
 
@@ -203,14 +202,13 @@ cgm::vec3f ClampColor(cgm::vec3f color)
 }
 int main()
 {
+    //std::cout << cameraRotation << "\n";
     for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
     {
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
         {
             cgm::vec3f direction = CanvasToViewPort(x,y);
-            std::cout << direction;
             direction = cameraRotation.mulDirectionMatrix(direction);
-            std::cout << direction;
             cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity(), RECURSION_DEPTH);
             color = ClampColor(color);
             PutPixel(x,y, color);

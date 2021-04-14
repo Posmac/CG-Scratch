@@ -207,20 +207,46 @@ namespace cgm {
         Matrix4x4(T e1, T e2, T e3, T e4,
                   T e5, T e6, T e7, T e8,
                   T e9, T e10, T e11, T e12,
-                  T e13, T e14, T e15, T e16) {
-            e[0][0] = e1, e[0][1] = e2, e[0][2] = e3, e[0][3] = e4,
-            e[1][0] = e5, e[1][1] = e6, e[1][2] = e7, e[1][3] = e8,
-            e[2][0] = e9, e[2][1] = e10, e[2][2] = e11, e[2][3] = e12,
-            e[3][0] = e13, e[3][1] = e14, e[3][2] = e15, e[3][3] = e16;
-        }
+                  T e13, T e14, T e15, T e16)
+                  {
+                    e[0][0] = e1, e[0][1] = e2, e[0][2] = e3, e[0][3] = e4,
+                    e[1][0] = e5, e[1][1] = e6, e[1][2] = e7, e[1][3] = e8,
+                    e[2][0] = e9, e[2][1] = e10, e[2][2] = e11, e[2][3] = e12,
+                    e[3][0] = e13, e[3][1] = e14, e[3][2] = e15, e[3][3] = e16;
+                  }
 
         //accessors
         const T* operator[](uint8_t i) const { return e[i]; };
 
         T& operator[](uint8_t i) { return e[i]; };
 
-        //operation with matrices
+        //streaming
+        friend std::ostream& operator << (std::ostream &s, const Matrix4x4 &m)
+        {
+            s << "[" << m[0][0] <<
+              " " <<  m[0][1] <<
+              " " <<  m[0][2] <<
+              " " <<  m[0][3] << "\n" <<
 
+              " "  << m[1][0] <<
+              " "  << m[1][1] <<
+              " "  << m[1][2] <<
+              " "  << m[1][3] << "\n" <<
+
+              " "  << m[2][0] <<
+              " "  << m[2][1] <<
+              " "  << m[2][2] <<
+              " "  << m[2][3] << "\n" <<
+
+              " "  << m[3][0] <<
+              " "  << m[3][1] <<
+              " "  << m[3][2] <<
+              " "  << m[3][3] << "]";
+
+            return s;
+        }
+
+        //operation with matrices
         Matrix4x4 operator*(const Matrix4x4 &s) const {
             Matrix4x4 tmp;
             return tmp;
@@ -253,16 +279,9 @@ namespace cgm {
         vec3<S> mulDirectionMatrix(vec3<S> &src) const
         {
             vec3<S> result;
-            S a, b, c;
-
-            a = src[0] * e[0][0] + src[1] * e[1][0] + src[2 ] * e[2][0];
-            b = src[0] * e[0][1] + src[1] * e[1][1] + src[2] * e[2][1];
-            c = src[0] * e[0][2] + src[1] * e[1][2] + src[2] * e[2][2];
-
-            result.x = a;
-            result.y = b;
-            result.z = c;
-
+            result.x = src.x * e[0][0] + src.y * e[0][1] + src.z * e[0][2];
+            result.y = src.x * e[1][0] + src.y * e[1][1] + src.z * e[1][2];
+            result.z = src.x * e[2][0] + src.y * e[2][1] + src.z * e[2][2];
             return result;
         }
 
