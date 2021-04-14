@@ -5,21 +5,27 @@
 #include "Sphere.h"
 #include "Light.h"
 
-#define CANVAS_W 1024
-#define CANVAS_H 1024
+#define CANVAS_W 2
+#define CANVAS_H 2
+#define RECURSION_DEPTH 3
 
 int viewPortSize = 1;
 int projectionPlane = 1;
-cgm::vec3f cameraPosition(0.0f, 0.0f, 0.0f);
-cgm::vec3f backGroundColor(255.0f);
+cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
+cgm::vec3f backGroundColor(0.0f);
 const int spheresCount = 4;
 const int lightCount = 3;
+float rotationAngle = 60;
+cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
+                                0.0f, 1.0f, 0.0f, 0.0f,
+                                0.7071, 0.0f, 0.7071, 0.0f,
+                                0.0f, 0.0f, 0.0f, 1.0f);
 
 Sphere spheres[spheresCount] = {
-        Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f), cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500),
-        Sphere(cgm::vec3f(2.0f,  0.0f, 4.0f), cgm::vec3f(0.0f,   0.0f, 255.0f), 1.0f, 500),
-        Sphere(cgm::vec3f(-2.0f, 0.0f, 4.0f), cgm::vec3f(0.0f, 255.0f, 0.0f), 1.0f, 10),
-        Sphere(cgm::vec3f(0.0f, -5001.0f, 0.0f), cgm::vec3f(255.0f, 255.0f, 0.0f), 5000.0f, 1000),
+        Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f), cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500, 0.2f),
+        Sphere(cgm::vec3f(2.0f,  0.0f, 4.0f), cgm::vec3f(0.0f,   0.0f, 255.0f), 1.0f, 500, 0.3f),
+        Sphere(cgm::vec3f(-2.0f, 0.0f, 4.0f), cgm::vec3f(0.0f, 255.0f, 0.0f), 1.0f, 10, 0.4f),
+        Sphere(cgm::vec3f(0.0f, -5001.0f, 0.0f), cgm::vec3f(255.0f, 255.0f, 0.0f), 5000.0f, 1000, 0.5f),
 };
 
 Light lights[lightCount] = {
@@ -29,6 +35,13 @@ Light lights[lightCount] = {
 };
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
+
+struct Intersection
+{
+    Sphere *sphere;
+    float closest_t;
+};
+
 
 cgm::vec3f CanvasToViewPort(int x,int y)
 {
@@ -54,6 +67,39 @@ cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere 
 
 }
 
+Intersection* ClosestIntersection(cgm::vec3f &origin, cgm::vec3f  direction,float min_t, float max_t)
+{
+    float closest_t = std::numeric_limits<float>::infinity();
+    Sphere *closestSphere = NULL;
+    Intersection *intersection = NULL;
+
+    for(int i = 0; i < spheresCount; i++)
+    {
+        cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
+        if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
+        {
+            closest_t = ts.x;
+            closestSphere = &spheres[i];
+        }
+        if(ts.y < closest_t && min_t < ts.y && ts.y < max_t)
+        {
+            closest_t = ts.y;
+            closestSphere = &spheres[i];
+        }
+    }
+
+    if(closestSphere != NULL)
+    {
+        intersection = new Intersection{ closestSphere, closest_t };
+        return intersection;
+    }
+
+    return NULL;
+}
+cgm::vec3f ReflectRay(cgm::vec3f &v1,cgm::vec3f &n)
+{
+    return 2 * v1.dot(n) * n - v1;
+}
 cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view, float specular)
 {
     float intensity = 0.0f;
@@ -66,10 +112,22 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
        else
        {
            cgm::vec3f lDir;
+           float t_max;
+
            if(light.Type == POINT)
-                lDir = light.position - point;
+           {
+               lDir = light.position - point;
+                t_max = 1.0f;
+           }
            if(light.Type == DIRECTIONAL)
+           {
                lDir = light.direction;
+                t_max = std::numeric_limits<float>::infinity();
+           }
+
+           Intersection* blocker = ClosestIntersection(point, lDir, 0.01f, t_max);
+           if(blocker)
+               continue;
 
            lDir = lDir.normalize();
            normal = normal.normalize();
@@ -95,34 +153,31 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
     return intensity;
 }
 
-cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t)
-{
-    float closest_t = std::numeric_limits<float>::infinity();
-    Sphere closestSphere;
 
-    for(int i = 0; i < spheresCount; i++)
-    {
-        cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
-        if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
-        {
-            closest_t = ts.x;
-            closestSphere = spheres[i];
-        }
-        if(ts.y < closest_t && min_t < ts.y && ts.y < max_t)
-        {
-            closest_t = ts.y;
-            closestSphere = spheres[i];
-        }
-    }
-    if(closestSphere.radius == 0)
+
+cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
+{
+    Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
+    //std::cout << (intersection==NULL) << "\n";
+    if(intersection == NULL)
         return backGroundColor;
 
+    float closest_t = intersection->closest_t;
+    Sphere *closestSphere = intersection->sphere;
+
     cgm::vec3f point = origin + closest_t * direction;
-    cgm::vec3f normal = point - closestSphere.center;
+    cgm::vec3f normal = point - closestSphere->center;
 
     cgm::vec3f view = -1.0 * direction;
+    cgm::vec3f lighting = ComputeLighting(point, normal, view, closestSphere->specular);
+    cgm::vec3f localColor = lighting * closestSphere->color;
 
-    return closestSphere.color * ComputeLighting(point, normal, view, closestSphere.specular);
+    if(closestSphere->reflective <= 0 || depth <= 0)
+        return localColor;
+    cgm::vec3f reflectedRay = ReflectRay(view, normal);
+    cgm::vec3f reflectedColor = TraceRay(point, reflectedRay, 0.01f, std::numeric_limits<float>::infinity(), depth-1);
+
+    return (1-closestSphere->reflective) * localColor + closestSphere->reflective * reflectedColor;
 }
 
 void PutPixel(int x, int y,cgm::vec3f color)
@@ -153,7 +208,10 @@ int main()
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
         {
             cgm::vec3f direction = CanvasToViewPort(x,y);
-            cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity());
+            std::cout << direction;
+            direction = cameraRotation.mulDirectionMatrix(direction);
+            std::cout << direction;
+            cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity(), RECURSION_DEPTH);
             color = ClampColor(color);
             PutPixel(x,y, color);
         }
