@@ -7,7 +7,6 @@ include_directories(.)
 include_directories(Headers)
 include_directories(SourceFiles)
 include_directories(ImportedImages)
-include_directories(Headers/glm)
 
 add_executable(CG_Scratch
         GeneratedImages/output.ppm

@@ -8,8 +8,11 @@
 	"custom_math.h"
 	"shapes.h"
 
-1618250480 source:d:\education\c c++\cg-scratch\sourcefiles\main.cpp
+1618337009 source:d:\education\c c++\cg-scratch\sourcefiles\main.cpp
+	<limits>
 	<iostream>
+	<fstream>
 	"custom_math.h"
-	"shapes.h"
+	"Sphere.h"
+	"Light.h"
 
