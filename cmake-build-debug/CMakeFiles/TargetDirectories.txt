@@ -1,3 +1,0 @@
-D:/Education/C C++/CG-Scratch/cmake-build-debug/CMakeFiles/CG_Scratch.dir
-D:/Education/C C++/CG-Scratch/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/Education/C C++/CG-Scratch/cmake-build-debug/CMakeFiles/rebuild_cache.dir

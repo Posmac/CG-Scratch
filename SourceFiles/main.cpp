@@ -5,9 +5,9 @@
 #include "Sphere.h"
 #include "Light.h"
 
-#define CANVAS_W 2
-#define CANVAS_H 2
-#define RECURSION_DEPTH 3
+#define CANVAS_W 2048
+#define CANVAS_H 2048
+#define RECURSION_DEPTH 6
 
 int viewPortSize = 1;
 int projectionPlane = 1;
@@ -15,7 +15,6 @@ cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
 cgm::vec3f backGroundColor(0.0f);
 const int spheresCount = 4;
 const int lightCount = 3;
-float rotationAngle = 60;
 cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
                                 0.0f, 1.0f, 0.0f, 0.0f,
                                 0.7071, 0.0f, 0.7071, 0.0f,
@@ -36,8 +35,9 @@ Light lights[lightCount] = {
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
-struct Intersection
+class Intersection
 {
+public:
     Sphere *sphere;
     float closest_t;
 };
@@ -112,7 +112,7 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
        else
        {
            cgm::vec3f lDir;
-           float t_max;
+           float t_max = 0.0f;
 
            if(light.Type == POINT)
            {
@@ -158,7 +158,6 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
 cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
 {
     Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
-    //std::cout << (intersection==NULL) << "\n";
     if(intersection == NULL)
         return backGroundColor;
 
@@ -203,14 +202,23 @@ cgm::vec3f ClampColor(cgm::vec3f color)
 }
 int main()
 {
+    cgm::Matrix4x4f m1(2.0f,3.0f,-1.0f, 4.0f,
+                       10.0f,5.0f,-4.0f,0.0f,
+                       0.0f, -7.0f, 3.5f, 4.9f,
+                       -0.1f, 0.17f, 0.0f, -5.0f);
+    cgm::Matrix4x4f m2(0.707107, 0, -0.707107, 0, -0.331295, 0.883452, -0.331295, 0, 0.624695, 0.468521, 0.624695, 0, 4.000574,
+                       3.00043, 4.000574, 1);
+
+    cgm::Matrix4x4f m3 = m2.inverse();
+    std::cout << m2.inverse() << std::endl;
+
+
     for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
     {
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
         {
             cgm::vec3f direction = CanvasToViewPort(x,y);
-            std::cout << direction;
             direction = cameraRotation.mulDirectionMatrix(direction);
-            std::cout << direction;
             cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity(), RECURSION_DEPTH);
             color = ClampColor(color);
             PutPixel(x,y, color);

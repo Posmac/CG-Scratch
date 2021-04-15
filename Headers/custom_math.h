@@ -53,7 +53,7 @@ namespace cgm {
         }
 
         //accessors
-        const T *operator[](uint8_t i) const { return (&x)[i]; };
+        const T &operator[](uint8_t i) const { return (&x)[i]; };
 
         T &operator[](uint8_t i) { return (&x)[i]; };
 
@@ -148,7 +148,7 @@ namespace cgm {
         }
 
         //accessors
-        const T *operator[](uint8_t i) const { return (&x)[i]; };
+        const T &operator[](uint8_t i) const { return (&x)[i]; };
 
         T &operator[](uint8_t i) { return (&x)[i]; };
 
@@ -207,26 +207,167 @@ namespace cgm {
         Matrix4x4(T e1, T e2, T e3, T e4,
                   T e5, T e6, T e7, T e8,
                   T e9, T e10, T e11, T e12,
-                  T e13, T e14, T e15, T e16) {
-            e[0][0] = e1, e[0][1] = e2, e[0][2] = e3, e[0][3] = e4,
-            e[1][0] = e5, e[1][1] = e6, e[1][2] = e7, e[1][3] = e8,
-            e[2][0] = e9, e[2][1] = e10, e[2][2] = e11, e[2][3] = e12,
-            e[3][0] = e13, e[3][1] = e14, e[3][2] = e15, e[3][3] = e16;
-        }
-
+                  T e13, T e14, T e15, T e16)
+                  {
+                    e[0][0] = e1, e[0][1] = e2, e[0][2] = e3, e[0][3] = e4,
+                    e[1][0] = e5, e[1][1] = e6, e[1][2] = e7, e[1][3] = e8,
+                    e[2][0] = e9, e[2][1] = e10, e[2][2] = e11, e[2][3] = e12,
+                    e[3][0] = e13, e[3][1] = e14, e[3][2] = e15, e[3][3] = e16;
+                  }
         //accessors
         const T* operator[](uint8_t i) const { return e[i]; };
+        T* operator[](uint8_t i) { return e[i]; };
 
-        T& operator[](uint8_t i) { return e[i]; };
+        //streaming
+        friend std::ostream& operator << (std::ostream &s, const Matrix4x4 &m)
+        {
+            s << "[" << m[0][0] <<
+              " " <<  m[0][1] <<
+              " " <<  m[0][2] <<
+              " " <<  m[0][3] << "\n" <<
+
+              " "  << m[1][0] <<
+              " "  << m[1][1] <<
+              " "  << m[1][2] <<
+              " "  << m[1][3] << "\n" <<
+
+              " "  << m[2][0] <<
+              " "  << m[2][1] <<
+              " "  << m[2][2] <<
+              " "  << m[2][3] << "\n" <<
+
+              " "  << m[3][0] <<
+              " "  << m[3][1] <<
+              " "  << m[3][2] <<
+              " "  << m[3][3] << "]";
+
+            return s;
+        }
 
         //operation with matrices
-
-        Matrix4x4 operator*(const Matrix4x4 &s) const {
+        Matrix4x4 operator * (const Matrix4x4 &s)
+        {
             Matrix4x4 tmp;
+            tmp = mul(s);
             return tmp;
         }
 
         //multiplication //transposed //inverse
+        Matrix4x4 mul(const Matrix4x4<T> &b)
+        {
+            float e1 = e[0][0] * b[0][0] + e[0][1] * b[1][0] + e[0][2] * b[2][0] + e[0][3] * b[3][0];
+            float e2 = e[0][0] * b[0][1] + e[0][1] * b[1][1] + e[0][2] * b[2][1] + e[0][3] * b[3][1];
+            float e3 = e[0][0] * b[0][2] + e[0][1] * b[1][2] + e[0][2] * b[2][2] + e[0][3] * b[3][2];
+            float e4 = e[0][0] * b[0][3] + e[0][1] * b[1][3] + e[0][2] * b[2][3] + e[0][3] * b[3][3];
+
+            float e5 = e[1][0] * b[0][0] + e[1][1] * b[1][0] + e[1][2] * b[2][0] + e[1][3] * b[3][0];
+            float e6 = e[1][0] * b[0][1] + e[1][1] * b[1][1] + e[1][2] * b[2][1] + e[1][3] * b[3][1];
+            float e7 = e[1][0] * b[0][2] + e[1][1] * b[1][2] + e[1][2] * b[2][2] + e[1][3] * b[3][2];
+            float e8 = e[1][0] * b[0][3] + e[1][1] * b[1][3] + e[1][2] * b[2][3] + e[1][3] * b[3][3];
+
+            float e9 = e[2][0] * b[0][0] + e[2][1] * b[1][0] + e[2][2] * b[2][0] + e[2][3] * b[3][0];
+            float e10 = e[2][0] * b[0][1] + e[2][1] * b[1][1] + e[2][2] * b[2][1] + e[2][3] * b[3][1];
+            float e11 = e[2][0] * b[0][2] + e[2][1] * b[1][2] + e[2][2] * b[2][2] + e[2][3] * b[3][2];
+            float e12 = e[2][0] * b[0][3] + e[2][1] * b[1][3] + e[2][2] * b[2][3] + e[2][3] * b[3][3];
+
+            float e13 = e[3][0] * b[0][0] + e[3][1] * b[1][0] + e[3][2] * b[2][0] + e[3][3] * b[3][0];
+            float e14 = e[3][0] * b[0][1] + e[3][1] * b[1][1] + e[3][2] * b[2][1] + e[3][3] * b[3][1];
+            float e15 = e[3][0] * b[0][2] + e[3][1] * b[1][2] + e[3][2] * b[2][2] + e[3][3] * b[3][2];
+            float e16 = e[3][0] * b[0][3] + e[3][1] * b[1][3] + e[3][2] * b[2][3] + e[3][3] * b[3][3];
+
+            return {e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16};
+        }
+
+        Matrix4x4 transpose()
+        {
+            return
+            {
+                e[0][0], e[1][0], e[2][0], e[3][0],
+                e[0][1], e[1][1], e[2][1], e[3][1],
+                e[0][2], e[1][2], e[2][2], e[3][2],
+                e[0][3], e[1][3], e[2][3], e[3][3]
+            };
+        }
+
+        Matrix4x4 inverse()
+        {
+            int i,j,k;
+            Matrix4x4 s;
+            Matrix4x4 t (*this);
+
+            for(int i = 0; i < 3; i++)
+            {
+                int pivot = i;
+                T pivotsize = t[i][i];
+                if(pivotsize < 0)
+                    pivotsize = -pivotsize;
+                for(j = i+1; j < 4; j++)
+                {
+                    T tmp = t[j][i];
+
+                    if(tmp < 0)
+                        tmp = -tmp;
+                    if(tmp > pivotsize)
+                    {
+                        pivot = j;
+                        pivotsize = tmp;
+                    }
+                }
+                if(pivotsize == 0)
+                    return {};
+
+                if(pivot != i)
+                {
+                    for(j = 0; j < 4; j++)
+                    {
+                        T tmp;
+                        tmp = t[i][j];
+                        t[i][j] = t[pivot][j];
+                        t[pivot][j] = tmp;
+
+                        tmp = s[i][j];
+                        s[i][j] = s[pivot][j];
+                        s[pivot][j] = tmp;
+                    }
+                }
+
+                for(j = i+1; j < 4; j++)
+                {
+                    T f = t[j][i] / t[i][i];
+                    for(k = 0; k < 4; k++)
+                    {
+                        t[j][k] -= f * t[i][k];
+                        s[j][k] -= f * s[i][k];
+                    }
+                }
+            }
+
+            for(i = 3; i >= 0; --i)
+            {
+                T f;
+                if((f = t[i][i]) == 0)
+                {
+                    return {};
+                }
+
+                for(j = 0; j < 4; j++)
+                {
+                    t[i][j] /= f;
+                    s[i][j] /= f;
+                }
+
+                for(j = 0; j < i; j++)
+                {
+                    f = t[j][i];
+                    for(k = 0; k < 4; k++)
+                    {
+                        t[j][k] -= f * t[i][k];
+                        s[j][k] -= f * s[i][k];
+                     }
+                }
+            }
+            return s;
+        }
 
         //vector matrix multiplication
         template<typename S>
@@ -253,16 +394,9 @@ namespace cgm {
         vec3<S> mulDirectionMatrix(vec3<S> &src) const
         {
             vec3<S> result;
-            S a, b, c;
-
-            a = src[0] * e[0][0] + src[1] * e[1][0] + src[2 ] * e[2][0];
-            b = src[0] * e[0][1] + src[1] * e[1][1] + src[2] * e[2][1];
-            c = src[0] * e[0][2] + src[1] * e[1][2] + src[2] * e[2][2];
-
-            result.x = a;
-            result.y = b;
-            result.z = c;
-
+            result.x = src[0] * e[0][0] + src[1] * e[0][1] + src[2] * e[0][2];
+            result.y = src[0] * e[1][0] + src[1] * e[1][1] + src[2] * e[1][2];
+            result.z = src[0] * e[2][0] + src[1] * e[2][1] + src[2] * e[2][2];
             return result;
         }
 
