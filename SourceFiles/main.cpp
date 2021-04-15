@@ -5,6 +5,8 @@
 #include "Sphere.h"
 #include "Light.h"
 
+#include "Scene.h"
+
 #define CANVAS_W 2048
 #define CANVAS_H 2048
 #define RECURSION_DEPTH 6
@@ -154,7 +156,6 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
 }
 
 
-
 cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
 {
     Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
@@ -202,17 +203,6 @@ cgm::vec3f ClampColor(cgm::vec3f color)
 }
 int main()
 {
-    cgm::Matrix4x4f m1(2.0f,3.0f,-1.0f, 4.0f,
-                       10.0f,5.0f,-4.0f,0.0f,
-                       0.0f, -7.0f, 3.5f, 4.9f,
-                       -0.1f, 0.17f, 0.0f, -5.0f);
-    cgm::Matrix4x4f m2(0.707107, 0, -0.707107, 0, -0.331295, 0.883452, -0.331295, 0, 0.624695, 0.468521, 0.624695, 0, 4.000574,
-                       3.00043, 4.000574, 1);
-
-    cgm::Matrix4x4f m3 = m2.inverse();
-    std::cout << m2.inverse() << std::endl;
-
-
     for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
     {
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)

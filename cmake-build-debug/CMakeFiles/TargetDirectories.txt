@@ -1,0 +1,3 @@
+C:/Own/CG_Scratch/cmake-build-debug/CMakeFiles/CG_Scratch.dir
+C:/Own/CG_Scratch/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Own/CG_Scratch/cmake-build-debug/CMakeFiles/rebuild_cache.dir

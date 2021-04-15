@@ -1,4 +1,4 @@
-C:\Users\posma\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\202.6948.80\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "D:\Education\C C++\CG-Scratch"
+C:\Users\geeko\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\203.6682.181\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" C:\Own\CG_Scratch
 -- Configuring done
 -- Generating done
--- Build files have been written to: D:/Education/C C++/CG-Scratch/cmake-build-debug
+-- Build files have been written to: C:/Own/CG_Scratch/cmake-build-debug

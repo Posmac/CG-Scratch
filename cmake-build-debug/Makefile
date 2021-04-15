@@ -127,6 +127,114 @@ CG_Scratch\fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\build
 .PHONY : CG_Scratch\fast
 
+SourceFiles\Camera.obj: SourceFiles\Camera.cpp.obj
+
+.PHONY : SourceFiles\Camera.obj
+
+# target to build an object file
+SourceFiles\Camera.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Camera.cpp.obj
+.PHONY : SourceFiles\Camera.cpp.obj
+
+SourceFiles\Camera.i: SourceFiles\Camera.cpp.i
+
+.PHONY : SourceFiles\Camera.i
+
+# target to preprocess a source file
+SourceFiles\Camera.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Camera.cpp.i
+.PHONY : SourceFiles\Camera.cpp.i
+
+SourceFiles\Camera.s: SourceFiles\Camera.cpp.s
+
+.PHONY : SourceFiles\Camera.s
+
+# target to generate assembly for a file
+SourceFiles\Camera.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Camera.cpp.s
+.PHONY : SourceFiles\Camera.cpp.s
+
+SourceFiles\Canvas.obj: SourceFiles\Canvas.cpp.obj
+
+.PHONY : SourceFiles\Canvas.obj
+
+# target to build an object file
+SourceFiles\Canvas.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Canvas.cpp.obj
+.PHONY : SourceFiles\Canvas.cpp.obj
+
+SourceFiles\Canvas.i: SourceFiles\Canvas.cpp.i
+
+.PHONY : SourceFiles\Canvas.i
+
+# target to preprocess a source file
+SourceFiles\Canvas.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Canvas.cpp.i
+.PHONY : SourceFiles\Canvas.cpp.i
+
+SourceFiles\Canvas.s: SourceFiles\Canvas.cpp.s
+
+.PHONY : SourceFiles\Canvas.s
+
+# target to generate assembly for a file
+SourceFiles\Canvas.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Canvas.cpp.s
+.PHONY : SourceFiles\Canvas.cpp.s
+
+SourceFiles\Ray.obj: SourceFiles\Ray.cpp.obj
+
+.PHONY : SourceFiles\Ray.obj
+
+# target to build an object file
+SourceFiles\Ray.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Ray.cpp.obj
+.PHONY : SourceFiles\Ray.cpp.obj
+
+SourceFiles\Ray.i: SourceFiles\Ray.cpp.i
+
+.PHONY : SourceFiles\Ray.i
+
+# target to preprocess a source file
+SourceFiles\Ray.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Ray.cpp.i
+.PHONY : SourceFiles\Ray.cpp.i
+
+SourceFiles\Ray.s: SourceFiles\Ray.cpp.s
+
+.PHONY : SourceFiles\Ray.s
+
+# target to generate assembly for a file
+SourceFiles\Ray.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Ray.cpp.s
+.PHONY : SourceFiles\Ray.cpp.s
+
+SourceFiles\Scene.obj: SourceFiles\Scene.cpp.obj
+
+.PHONY : SourceFiles\Scene.obj
+
+# target to build an object file
+SourceFiles\Scene.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Scene.cpp.obj
+.PHONY : SourceFiles\Scene.cpp.obj
+
+SourceFiles\Scene.i: SourceFiles\Scene.cpp.i
+
+.PHONY : SourceFiles\Scene.i
+
+# target to preprocess a source file
+SourceFiles\Scene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Scene.cpp.i
+.PHONY : SourceFiles\Scene.cpp.i
+
+SourceFiles\Scene.s: SourceFiles\Scene.cpp.s
+
+.PHONY : SourceFiles\Scene.s
+
+# target to generate assembly for a file
+SourceFiles\Scene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\CG_Scratch.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\CG_Scratch.dir\SourceFiles\Scene.cpp.s
+.PHONY : SourceFiles\Scene.cpp.s
+
 SourceFiles\main.obj: SourceFiles\main.cpp.obj
 
 .PHONY : SourceFiles\main.obj
@@ -163,6 +271,18 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... CG_Scratch
+	@echo ... SourceFiles/Camera.obj
+	@echo ... SourceFiles/Camera.i
+	@echo ... SourceFiles/Camera.s
+	@echo ... SourceFiles/Canvas.obj
+	@echo ... SourceFiles/Canvas.i
+	@echo ... SourceFiles/Canvas.s
+	@echo ... SourceFiles/Ray.obj
+	@echo ... SourceFiles/Ray.i
+	@echo ... SourceFiles/Ray.s
+	@echo ... SourceFiles/Scene.obj
+	@echo ... SourceFiles/Scene.i
+	@echo ... SourceFiles/Scene.s
 	@echo ... SourceFiles/main.obj
 	@echo ... SourceFiles/main.i
 	@echo ... SourceFiles/main.s

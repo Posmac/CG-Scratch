@@ -92,10 +92,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Own/CG_Scratch/GeneratedImages/output.ppm">
+		<Unit filename="C:/Own/CG_Scratch/Headers/Camera.h">
+			<Option target="CG_Scratch"/>
+		</Unit>
+		<Unit filename="C:/Own/CG_Scratch/Headers/Canvas.h">
 			<Option target="CG_Scratch"/>
 		</Unit>
 		<Unit filename="C:/Own/CG_Scratch/Headers/Light.h">
+			<Option target="CG_Scratch"/>
+		</Unit>
+		<Unit filename="C:/Own/CG_Scratch/Headers/Ray.h">
+			<Option target="CG_Scratch"/>
+		</Unit>
+		<Unit filename="C:/Own/CG_Scratch/Headers/Scene.h">
 			<Option target="CG_Scratch"/>
 		</Unit>
 		<Unit filename="C:/Own/CG_Scratch/Headers/Sphere.h">
@@ -104,7 +113,16 @@
 		<Unit filename="C:/Own/CG_Scratch/Headers/custom_math.h">
 			<Option target="CG_Scratch"/>
 		</Unit>
-		<Unit filename="C:/Own/CG_Scratch/ImportedImages/output.ppm">
+		<Unit filename="C:/Own/CG_Scratch/SourceFiles/Camera.cpp">
+			<Option target="CG_Scratch"/>
+		</Unit>
+		<Unit filename="C:/Own/CG_Scratch/SourceFiles/Canvas.cpp">
+			<Option target="CG_Scratch"/>
+		</Unit>
+		<Unit filename="C:/Own/CG_Scratch/SourceFiles/Ray.cpp">
+			<Option target="CG_Scratch"/>
+		</Unit>
+		<Unit filename="C:/Own/CG_Scratch/SourceFiles/Scene.cpp">
 			<Option target="CG_Scratch"/>
 		</Unit>
 		<Unit filename="C:/Own/CG_Scratch/SourceFiles/main.cpp">

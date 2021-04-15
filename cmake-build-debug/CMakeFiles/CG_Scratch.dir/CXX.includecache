@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../Headers/Light.h
+
+../Headers/Scene.h
+
+../Headers/Sphere.h
+custom_math.h
+../Headers/custom_math.h
+
+../Headers/custom_math.h
+cmath
+-
+ostream
+-
+
+C:/Own/CG_Scratch/SourceFiles/Canvas.cpp
+
+C:/Own/CG_Scratch/SourceFiles/Scene.cpp
+
+C:/Own/CG_Scratch/SourceFiles/main.cpp
+limits
+-
+iostream
+-
+fstream
+-
+custom_math.h
+C:/Own/CG_Scratch/SourceFiles/custom_math.h
+Sphere.h
+C:/Own/CG_Scratch/SourceFiles/Sphere.h
+Light.h
+C:/Own/CG_Scratch/SourceFiles/Light.h
+Scene.h
+C:/Own/CG_Scratch/SourceFiles/Scene.h
+
