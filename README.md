@@ -23,13 +23,13 @@ There i will develop RayTracer and Resterizer from scratch using C++, without an
   ![](images/raytraces.png)
    
 3) *Rasterizer*                                               
-   a)Lines                             
-   b)Filled Triangles                               
-   c)Shaded Triangles                                         
-   d)Perspective Projection                                          
-   e)Describing and Rendering a Scene                                                                                  
-   f)Clipping                                                                                                                                                                    
-   g)Hidden Surface Removal                                                                                  
-   h)Shading                                                                                  
-   i)Textures                                                                                  
-   j)......                                                                                  
+   a) Lines                             
+   b) Filled Triangles                               
+   c) Shaded Triangles                                         
+   d) Perspective Projection                                          
+   e) Describing and Rendering a Scene                                                                                  
+   f) Clipping                                                                                                                                                                    
+   g) Hidden Surface Removal                                                                                  
+   h) Shading                                                                                  
+   i) Textures                                                                                  
+   j) ......                                                                                  
