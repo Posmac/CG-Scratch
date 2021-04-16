@@ -4,6 +4,18 @@
 #define CANVAS_H 512
 #define RECURSION_DEPTH 6
 
+
+void PutPixel(float x, float y, cgm::vec3f color)
+{
+    x = CANVAS_W/2 + floor(x);
+    y = CANVAS_H/2 - floor(y) - 1;
+
+    if(x < 0 || x >= CANVAS_W || y < 0 || y <= CANVAS_H)
+        return;
+    int number = y * CANVAS_W + x;
+
+}
+
 int main()
 {
     cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
