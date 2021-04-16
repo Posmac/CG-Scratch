@@ -1,0 +1,4 @@
+#ifndef CG_SCRATCH_CAMERA_H
+#define CG_SCRATCH_CAMERA_H
+
+#endif //CG_SCRATCH_CAMERA_H
