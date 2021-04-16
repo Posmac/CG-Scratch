@@ -16,4 +16,8 @@ add_executable(CG_Scratch
         Headers/Scene.h
         SourceFiles/Scene.cpp
         SourceFiles/Canvas.cpp
-        Headers/Canvas.h Headers/Camera.h SourceFiles/Camera.cpp Headers/Ray.h SourceFiles/Ray.cpp)
+        Headers/Canvas.h
+        Headers/Camera.h
+        SourceFiles/Camera.cpp
+        Headers/Ray.h
+        SourceFiles/Ray.cpp)

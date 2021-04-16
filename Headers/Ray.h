@@ -3,6 +3,7 @@
 #include "custom_math.h"
 #include "Sphere.h"
 #include "Light.h"
+#include <vector>
 
 namespace cg
 {
@@ -16,10 +17,11 @@ namespace cg
     class Ray
     {
     public:
-        Sphere *spheres;
-        Light *lights;
+        std::vector<Sphere> spheres;
+        std::vector<Light> lights;
+        cgm::vec3f *backGroundColor;
 
-        Ray(Sphere &spheresPTR, Light &lightsPTR);
+        Ray(std::vector<Sphere> &spheresPTR, std::vector<Light> &lightsPTR, cgm::vec3f *bColor);
         ~Ray();
         cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth);
         cgm::vec3f ReflectRay(cgm::vec3f &v1,cgm::vec3f &n);

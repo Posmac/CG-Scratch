@@ -1,8 +1,8 @@
 #include <limits>
 #include "Ray.h"
 
-cg::Ray::Ray(Sphere &spheresPTR, Light &lightsPTR)
-        : spheres(&spheresPTR), lights(&lightsPTR)
+cg::Ray::Ray(std::vector<Sphere> &spheresPTR, std::vector<Light> &lightsPTR, cgm::vec3f *bColor)
+        : spheres(spheresPTR), lights(lightsPTR), backGroundColor(bColor)
 {
 
 }
@@ -13,8 +13,8 @@ cg::Ray::~Ray()
 cgm::vec3f cg::Ray::TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
 {
     Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
-    /*if(intersection == NULL)
-        return backGroundColor;*/
+    if(intersection == NULL)
+        return *backGroundColor;
 
     float closest_t = intersection->closest_t;
     Sphere *closestSphere = intersection->sphere;
@@ -39,11 +39,11 @@ cgm::vec3f cg::Ray::ReflectRay(cgm::vec3f &v1, cgm::vec3f &n) \
 }
 cg::Intersection * cg::Ray::ClosestIntersection(cgm::vec3f &origin, cgm::vec3f direction, float min_t, float max_t)
 {
-    /*float closest_t = std::numeric_limits<float>::infinity();
+    float closest_t = std::numeric_limits<float>::infinity();
     Sphere *closestSphere = NULL;
     Intersection *intersection = NULL;
 
-    for(int i = 0; i < spheresCount; i++)
+    for(int i = 0; i < spheres.size(); i++)
     {
         cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
         if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
@@ -64,7 +64,7 @@ cg::Intersection * cg::Ray::ClosestIntersection(cgm::vec3f &origin, cgm::vec3f d
         return intersection;
     }
 
-    return NULL;*/
+    return NULL;
 }
 
 cgm::vec2f cg::Ray::IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere &sphere)
@@ -87,7 +87,7 @@ cgm::vec3f cg::Ray::ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::ve
 {
     float intensity = 0.0f;
 
-    /*for(int i = 0 ; i < spheresCount; i++)
+    for(int i = 0 ; i < lights.size(); i++)
     {
         Light light = lights[i];
         if(light.Type == AMBIENT)
@@ -132,6 +132,6 @@ cgm::vec3f cg::Ray::ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::ve
 
             }
         }
-    }*/
+    }
     return intensity;
 }
