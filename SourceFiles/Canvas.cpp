@@ -5,6 +5,10 @@ cg::Canvas::Canvas(const int &w, const int &h, const int &vSize, const int &pDis
 {
 
 }
+cg::Canvas::~Canvas()
+{
+
+}
 cgm::vec3f cg::Canvas::CanvasToViewPort(int x, int y)
 {
     return cgm::vec3f( x * viewPortSize/(float) canvas_weight,

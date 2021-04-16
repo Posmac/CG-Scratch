@@ -11,19 +11,21 @@
 
 namespace cg
 {
-    std::vector<Sphere> _sceneSpheres;
-    std::vector<Light> _sceneLights;
-
     enum RenderType {RAYTRACING, RASTERIZATION};
-
     class Scene
     {
     public:
+
+        std::vector<Sphere> _sceneSpheres;
+        std::vector<Light> _sceneLights;
+
         Scene();
         ~Scene();
-        void AddObjectToScene(const Sphere &sphere) const;
-        void AddLightToScene(const Light &light) const;
-        void DrawScene(cg::Canvas &canvas,cg::Camera &camera,cg::Ray &ray , const float depth) const;
+        void AddObjectToScene(const Sphere &sphere);
+        void AddObjectsToScene(const Sphere *sphere, int size);
+        void AddLightToScene(const Light &light);
+        void AddLightsToScene(const Light *light, int size);
+        void DrawScene(cg::Canvas &canvas,cg::Camera &camera,cg::Ray &ray , const float depth);
     };
 }
 
