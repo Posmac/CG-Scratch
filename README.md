@@ -16,18 +16,20 @@ There i will develop RayTracer and Resterizer from scratch using C++, without an
    c) Shadows and reflections - **done**                                           
    d) Camera arbitrary positioning - **done**
    
-   *TODO: Parallelization, caching immutable values, other primitives support, transparency, refraction, constructive solid geometry*   
+   *TODO: Parallelization, caching immutable values, other primitives support, transparency, refraction, constructive solid geometry*
    
-   ![alt text](https://prnt.sc/11e1nd4)
+   **Final Screenshot**   
+   
+  ![](images/raytraces.png)
    
 3) *Rasterizer*                                               
-   a)Lines                             
-   b)Filled Triangles                               
-   c)Shaded Triangles                                         
-   d)Perspective Projection                                          
-   e)Describing and Rendering a Scene                                                                                  
-   f)Clipping                                                                                                                                                                    
-   g)Hidden Surface Removal                                                                                  
-   h)Shading                                                                                  
-   i)Textures                                                                                  
-   j)......                                                                                  
+   a) Lines                             
+   b) Filled Triangles                               
+   c) Shaded Triangles                                         
+   d) Perspective Projection                                          
+   e) Describing and Rendering a Scene                                                                                  
+   f) Clipping                                                                                                                                                                    
+   g) Hidden Surface Removal                                                                                  
+   h) Shading                                                                                  
+   i) Textures                                                                                  
+   j) ......                                                                                  
