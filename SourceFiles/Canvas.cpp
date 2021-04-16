@@ -42,7 +42,7 @@ void cg::Canvas::GenerateImage(const char* name) const
     }
 
     ofs.close();
-    std::cout << "DONE" << "\n";
+    std::cout << "DONE " + std::string (name) << "\n";
 }
 void cg::Canvas::PutPixel(int x, int y, const cgm::vec3f &color) const
 {
