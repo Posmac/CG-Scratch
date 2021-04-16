@@ -1,28 +1,24 @@
-#include <limits>
-#include <iostream>
-#include <fstream>
 #include "custom_math.h"
-#include "Sphere.h"
-#include "Light.h"
+
 
 #include "Scene.h"
 
-#define CANVAS_W 2048
-#define CANVAS_H 2048
-#define RECURSION_DEPTH 6
+//#define CANVAS_W 2048
+//#define CANVAS_H 2048
+//#define RECURSION_DEPTH 6
 
-int viewPortSize = 1;
-int projectionPlane = 1;
-cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
+//int viewPortSize = 1;
+//int projectionPlane = 1;
+//cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
 cgm::vec3f backGroundColor(0.0f);
 const int spheresCount = 4;
 const int lightCount = 3;
-cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
+/*cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
                                 0.0f, 1.0f, 0.0f, 0.0f,
                                 0.7071, 0.0f, 0.7071, 0.0f,
-                                0.0f, 0.0f, 0.0f, 1.0f);
+                                0.0f, 0.0f, 0.0f, 1.0f);*/
 
-Sphere spheres[spheresCount] = {
+/*Sphere spheres[spheresCount] = {
         Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f), cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500, 0.2f),
         Sphere(cgm::vec3f(2.0f,  0.0f, 4.0f), cgm::vec3f(0.0f,   0.0f, 255.0f), 1.0f, 500, 0.3f),
         Sphere(cgm::vec3f(-2.0f, 0.0f, 4.0f), cgm::vec3f(0.0f, 255.0f, 0.0f), 1.0f, 10, 0.4f),
@@ -33,26 +29,26 @@ Light lights[lightCount] = {
         Light(cgm::vec3f(), cgm::vec3f(), 0.2f, AMBIENT),
         Light(cgm::vec3f(2.0f, 1.0f, 0.0f), cgm::vec3f(), 0.6f, POINT),
         Light(cgm::vec3f(), cgm::vec3f(1.0f, 4.0f, 4.0f), 0.2f, DIRECTIONAL)
-};
+};*/
 
-cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
+//cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
-class Intersection
+/*class Intersection
 {
 public:
     Sphere *sphere;
     float closest_t;
-};
+};*/
 
 
-cgm::vec3f CanvasToViewPort(int x,int y)
+/*cgm::vec3f CanvasToViewPort(int x,int y)
 {
     return cgm::vec3f( x * viewPortSize/(float) CANVAS_W,
                        y * viewPortSize/(float) CANVAS_H,
                        projectionPlane);
-}
+}*/
 
-cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere &sphere)
+/*cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere &sphere)
 {
     cgm::vec3f OC = origin - sphere.center;
 
@@ -68,8 +64,8 @@ cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere 
                         (-b - sqrt(discriminant)) / (2 * a));
 
 }
-
-Intersection* ClosestIntersection(cgm::vec3f &origin, cgm::vec3f  direction,float min_t, float max_t)
+*/
+/*Intersection* ClosestIntersection(cgm::vec3f &origin, cgm::vec3f  direction,float min_t, float max_t)
 {
     float closest_t = std::numeric_limits<float>::infinity();
     Sphere *closestSphere = NULL;
@@ -97,12 +93,12 @@ Intersection* ClosestIntersection(cgm::vec3f &origin, cgm::vec3f  direction,floa
     }
 
     return NULL;
-}
-cgm::vec3f ReflectRay(cgm::vec3f &v1,cgm::vec3f &n)
+}*/
+/*cgm::vec3f ReflectRay(cgm::vec3f &v1,cgm::vec3f &n)
 {
     return 2 * v1.dot(n) * n - v1;
-}
-cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view, float specular)
+}*/
+/*cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view, float specular)
 {
     float intensity = 0.0f;
 
@@ -153,10 +149,10 @@ cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view
        }
     }
     return intensity;
-}
+}*/
 
 
-cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
+/*cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
 {
     Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
     if(intersection == NULL)
@@ -178,9 +174,9 @@ cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float 
     cgm::vec3f reflectedColor = TraceRay(point, reflectedRay, 0.01f, std::numeric_limits<float>::infinity(), depth-1);
 
     return (1-closestSphere->reflective) * localColor + closestSphere->reflective * reflectedColor;
-}
+}*/
 
-void PutPixel(int x, int y,cgm::vec3f color)
+/*void PutPixel(int x, int y,cgm::vec3f color)
 {
     x = CANVAS_W/2 + x;
     y = CANVAS_H/2 - y - 1;
@@ -191,8 +187,8 @@ void PutPixel(int x, int y,cgm::vec3f color)
     canvasBuffer[number].x  = color.x;
     canvasBuffer[number].y  = color.y;
     canvasBuffer[number].z  = color.z;
-}
-cgm::vec3f ClampColor(cgm::vec3f color)
+}*/
+/*cgm::vec3f ClampColor(cgm::vec3f color)
 {
     return
     {
@@ -200,10 +196,10 @@ cgm::vec3f ClampColor(cgm::vec3f color)
         std::min(255.0f, std::max(0.0f, color.y)),
         std::min(255.0f, std::max(0.0f, color.z))
     };
-}
+}*/
 int main()
 {
-    for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
+    /*for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
     {
         for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
         {
@@ -213,9 +209,9 @@ int main()
             color = ClampColor(color);
             PutPixel(x,y, color);
         }
-    }
+    }*/
 
-    std::ofstream ofs;
+    /*std::ofstream ofs;
     ofs.open("./output.ppm");
     ofs << "P3\n" << CANVAS_W << " " << CANVAS_H << "\n255\n";
 
@@ -230,6 +226,6 @@ int main()
     }
 
     ofs.close();
-    std::cout << "DONE" << "\n";
+    std::cout << "DONE" << "\n";*/
     return 0;
 }

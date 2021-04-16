@@ -5,6 +5,9 @@
 #include <vector>
 #include "Sphere.h"
 #include "Light.h"
+#include "Canvas.h"
+#include "Camera.h"
+#include "Ray.h"
 
 namespace cg
 {
@@ -20,7 +23,7 @@ namespace cg
         ~Scene();
         void AddObjectToScene(const Sphere &sphere) const;
         void AddLightToScene(const Light &light) const;
-        void DrawScene(const char* name, const RenderType renderType) const;
+        void DrawScene(cg::Canvas &canvas,cg::Camera &camera,cg::Ray &ray , const float depth) const;
     };
 }
 
