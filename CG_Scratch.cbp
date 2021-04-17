@@ -32,8 +32,20 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Headers/Camera.h" />
+		<Unit filename="Headers/Canvas.h" />
+		<Unit filename="Headers/Light.h" />
+		<Unit filename="Headers/Ray.h" />
+		<Unit filename="Headers/Scene.h" />
+		<Unit filename="Headers/Sphere.h" />
+		<Unit filename="Headers/custom_math.h" />
 		<Unit filename="Headers/math.h" />
 		<Unit filename="Headers/shapes.h" />
+		<Unit filename="SourceFiles/Camera.cpp" />
+		<Unit filename="SourceFiles/Canvas.cpp" />
+		<Unit filename="SourceFiles/Old.h" />
+		<Unit filename="SourceFiles/Ray.cpp" />
+		<Unit filename="SourceFiles/Scene.cpp" />
 		<Unit filename="SourceFiles/main.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

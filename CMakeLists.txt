@@ -9,9 +9,15 @@ include_directories(SourceFiles)
 include_directories(ImportedImages)
 
 add_executable(CG_Scratch
-        GeneratedImages/output.ppm
         Headers/custom_math.h
         Headers/Sphere.h
-        ImportedImages/output.ppm
         SourceFiles/main.cpp
-        Headers/Light.h)
+        Headers/Light.h
+        Headers/Scene.h
+        SourceFiles/Scene.cpp
+        SourceFiles/Canvas.cpp
+        Headers/Canvas.h
+        Headers/Camera.h
+        SourceFiles/Camera.cpp
+        Headers/Ray.h
+        SourceFiles/Ray.cpp)

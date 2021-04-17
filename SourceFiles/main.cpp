@@ -1,232 +1,234 @@
-#include <limits>
-#include <iostream>
-#include <fstream>
-#include "custom_math.h"
-#include "Sphere.h"
-#include "Light.h"
+#include "Scene.h"
 
-#define CANVAS_W 2048
-#define CANVAS_H 2048
+#define CANVAS_W 1024
+#define CANVAS_H 1024
 #define RECURSION_DEPTH 6
-
-int viewPortSize = 1;
-int projectionPlane = 1;
-cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
-cgm::vec3f backGroundColor(0.0f);
-const int spheresCount = 4;
-const int lightCount = 3;
-cgm::Matrix4x4f cameraRotation (0.7070, 0.0f, -0.7071, 0.0f,
-                                0.0f, 1.0f, 0.0f, 0.0f,
-                                0.7071, 0.0f, 0.7071, 0.0f,
-                                0.0f, 0.0f, 0.0f, 1.0f);
-
-Sphere spheres[spheresCount] = {
-        Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f), cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500, 0.2f),
-        Sphere(cgm::vec3f(2.0f,  0.0f, 4.0f), cgm::vec3f(0.0f,   0.0f, 255.0f), 1.0f, 500, 0.3f),
-        Sphere(cgm::vec3f(-2.0f, 0.0f, 4.0f), cgm::vec3f(0.0f, 255.0f, 0.0f), 1.0f, 10, 0.4f),
-        Sphere(cgm::vec3f(0.0f, -5001.0f, 0.0f), cgm::vec3f(255.0f, 255.0f, 0.0f), 5000.0f, 1000, 0.5f),
-};
-
-Light lights[lightCount] = {
-        Light(cgm::vec3f(), cgm::vec3f(), 0.2f, AMBIENT),
-        Light(cgm::vec3f(2.0f, 1.0f, 0.0f), cgm::vec3f(), 0.6f, POINT),
-        Light(cgm::vec3f(), cgm::vec3f(1.0f, 4.0f, 4.0f), 0.2f, DIRECTIONAL)
-};
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
-class Intersection
+class Vertex
 {
 public:
-    Sphere *sphere;
-    float closest_t;
+    cgm::vec3f Position;
+    float shadingCoefficient;
+
+    Vertex(const cgm::vec3f &vPosition, const float h)
+        : Position(vPosition), shadingCoefficient(h) {}
 };
 
-
-cgm::vec3f CanvasToViewPort(int x,int y)
+template<typename T>
+void Swap(T *p0, T *p1)
 {
-    return cgm::vec3f( x * viewPortSize/(float) CANVAS_W,
-                       y * viewPortSize/(float) CANVAS_H,
-                       projectionPlane);
+    T tmp = *p0;
+    *p0 = *p1;
+    *p1 = tmp;
 }
 
-cgm::vec2f IntersectRaySphere(cgm::vec3f &origin, cgm::vec3f &direction, Sphere &sphere)
+void PutPixel(float x, float y, cgm::vec3f color)
 {
-    cgm::vec3f OC = origin - sphere.center;
+    x = CANVAS_W/2 + floor(x);
+    y = CANVAS_H/2 - floor(y) - 1;
 
-    float a = direction.dot(direction);
-    float b = 2.0f * OC.dot(direction);
-    float c = OC.dot(OC) - pow(sphere.radius, 2.0f);
-
-    float discriminant = b * b - 4 * a * c;
-    if(discriminant < 0)
-        return cgm::vec2f(std::numeric_limits<float>::infinity());
-
-    return cgm::vec2f ( (-b + sqrt(discriminant)) / (2 * a),
-                        (-b - sqrt(discriminant)) / (2 * a));
-
-}
-
-Intersection* ClosestIntersection(cgm::vec3f &origin, cgm::vec3f  direction,float min_t, float max_t)
-{
-    float closest_t = std::numeric_limits<float>::infinity();
-    Sphere *closestSphere = NULL;
-    Intersection *intersection = NULL;
-
-    for(int i = 0; i < spheresCount; i++)
-    {
-        cgm::vec2f ts = IntersectRaySphere(origin, direction, spheres[i]);
-        if(ts.x < closest_t && min_t < ts.x && ts.x < max_t)
-        {
-            closest_t = ts.x;
-            closestSphere = &spheres[i];
-        }
-        if(ts.y < closest_t && min_t < ts.y && ts.y < max_t)
-        {
-            closest_t = ts.y;
-            closestSphere = &spheres[i];
-        }
-    }
-
-    if(closestSphere != NULL)
-    {
-        intersection = new Intersection{ closestSphere, closest_t };
-        return intersection;
-    }
-
-    return NULL;
-}
-cgm::vec3f ReflectRay(cgm::vec3f &v1,cgm::vec3f &n)
-{
-    return 2 * v1.dot(n) * n - v1;
-}
-cgm::vec3f ComputeLighting(cgm::vec3f point, cgm::vec3f normal, cgm::vec3f &view, float specular)
-{
-    float intensity = 0.0f;
-
-    for(int i = 0 ; i < spheresCount; i++)
-    {
-       Light light = lights[i];
-       if(light.Type == AMBIENT)
-           intensity += light.intensity;
-       else
-       {
-           cgm::vec3f lDir;
-           float t_max = 0.0f;
-
-           if(light.Type == POINT)
-           {
-               lDir = light.position - point;
-                t_max = 1.0f;
-           }
-           if(light.Type == DIRECTIONAL)
-           {
-               lDir = light.direction;
-                t_max = std::numeric_limits<float>::infinity();
-           }
-
-           Intersection* blocker = ClosestIntersection(point, lDir, 0.01f, t_max);
-           if(blocker)
-               continue;
-
-           lDir = lDir.normalize();
-           normal = normal.normalize();
-
-           float dp = normal.dot(lDir);
-           if(dp > 0)
-               intensity += light.intensity * dp;
-
-           if(specular != -1)
-           {
-               cgm::vec3f reflVec = (2.0f * normal.dot(lDir)) * normal - lDir;
-
-               reflVec = reflVec.normalize();
-               view = view.normalize();
-
-               float rp = reflVec.dot(view);
-               if(rp > 0)
-                   intensity += light.intensity * pow(rp, specular);
-
-           }
-       }
-    }
-    return intensity;
-}
-
-
-
-cgm::vec3f TraceRay(cgm::vec3f origin, cgm::vec3f direction, float min_t, float max_t, float depth)
-{
-    Intersection* intersection = ClosestIntersection(origin, direction, min_t, max_t);
-    if(intersection == NULL)
-        return backGroundColor;
-
-    float closest_t = intersection->closest_t;
-    Sphere *closestSphere = intersection->sphere;
-
-    cgm::vec3f point = origin + closest_t * direction;
-    cgm::vec3f normal = point - closestSphere->center;
-
-    cgm::vec3f view = -1.0 * direction;
-    cgm::vec3f lighting = ComputeLighting(point, normal, view, closestSphere->specular);
-    cgm::vec3f localColor = lighting * closestSphere->color;
-
-    if(closestSphere->reflective <= 0 || depth <= 0)
-        return localColor;
-    cgm::vec3f reflectedRay = ReflectRay(view, normal);
-    cgm::vec3f reflectedColor = TraceRay(point, reflectedRay, 0.01f, std::numeric_limits<float>::infinity(), depth-1);
-
-    return (1-closestSphere->reflective) * localColor + closestSphere->reflective * reflectedColor;
-}
-
-void PutPixel(int x, int y,cgm::vec3f color)
-{
-    x = CANVAS_W/2 + x;
-    y = CANVAS_H/2 - y - 1;
-
-    if(x < 0 || x >= CANVAS_W || y < 0 || y > CANVAS_H)
+    if(x < 0 || x >= CANVAS_W || y < 0 || y >= CANVAS_H)
         return;
     int number = x * CANVAS_W + y;
     canvasBuffer[number].x  = color.x;
     canvasBuffer[number].y  = color.y;
     canvasBuffer[number].z  = color.z;
 }
-cgm::vec3f ClampColor(cgm::vec3f color)
+
+std::vector<float>& Interpolate(float i0,float d0, float i1, float d1)
 {
-    return
+    std::vector<float> *values = new std::vector<float>;
+    if(i0 == i1)
     {
-        std::min(255.0f, std::max(0.0f, color.x)),
-        std::min(255.0f, std::max(0.0f, color.y)),
-        std::min(255.0f, std::max(0.0f, color.z))
-    };
+        values->push_back(d0);
+        return *values;
+    }
+    float a = (d1 - d0) / (i1 - i0);
+    float d = d0;
+    for(auto i = i0; i < i1; i++)
+    {
+        values->push_back(d);
+        d += a;
+    }
+    return *values;
 }
-int main()
+void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
 {
-    cgm::Matrix4x4f m1(2.0f,3.0f,-1.0f, 4.0f,
-                       10.0f,5.0f,-4.0f,0.0f,
-                       0.0f, -7.0f, 3.5f, 4.9f,
-                       -0.1f, 0.17f, 0.0f, -5.0f);
-    cgm::Matrix4x4f m2(0.707107, 0, -0.707107, 0, -0.331295, 0.883452, -0.331295, 0, 0.624695, 0.468521, 0.624695, 0, 4.000574,
-                       3.00043, 4.000574, 1);
-
-    cgm::Matrix4x4f m3 = m2.inverse();
-    std::cout << m2.inverse() << std::endl;
-
-
-    for(int x = -CANVAS_W/2; x < CANVAS_W/2; x++)
+    float dx = p1.x - p0.x;
+    float dy = p1.y - p0.y;
+    if(std::abs(dx) > std::abs(dy))
     {
-        for(int y = -CANVAS_H/2; y < CANVAS_H/2; y++)
+        if(dx < 0)
         {
-            cgm::vec3f direction = CanvasToViewPort(x,y);
-            direction = cameraRotation.mulDirectionMatrix(direction);
-            cgm::vec3f color = TraceRay(cameraPosition, direction.normalize(), 1, std::numeric_limits<float>::infinity(), RECURSION_DEPTH);
-            color = ClampColor(color);
+            cgm::vec3f tmp = p0;
+            p0 = p1;
+            p1 = tmp;
+        }
+        std::vector<float> ys = Interpolate(p0.x, p0.y, p1.x, p1.y);
+        for(int x = p0.x ; x <= p1.x; x++)
+        {
+            PutPixel(x, ys[x - p0.x], color);
+        }
+    }
+    else
+    {
+        if(dy < 0)
+        {
+            cgm::vec3f tmp = p0;
+            p0 = p1;
+            p1 = tmp;
+        }
+        std::vector<float> xs = Interpolate(p0.y, p0.x, p1.y, p1.x);
+        for(int y = p0.y ; y <= p1.y; y++)
+        {
+            PutPixel(xs[y - p0.y], y, color);
+        }
+    }
+}
+
+
+
+void DrawWireFrameTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
+{
+    DrawLine(p0, p1, color);
+    DrawLine(p1, p2, color);
+    DrawLine(p0, p2, color);
+}
+void DrawShadedTriangle(Vertex &v0, Vertex &v1, Vertex &v2, cgm::vec3f &color)
+{
+    if(v1.Position.y < v0.Position.y) { Swap(&v0, &v1); }
+    if(v2.Position.y < v0.Position.y) { Swap(&v0, &v2); }
+    if(v2.Position.y < v1.Position.y) { Swap(&v2, &v1); }
+
+    std::vector<float> x01 = Interpolate(v0.Position.y, v0.Position.x, v1.Position.y, v1.Position.x);
+    std::vector<float> h01 = Interpolate(v0.Position.y, v0.shadingCoefficient, v1.Position.y, v1.shadingCoefficient);
+
+    std::vector<float> x12 = Interpolate(v1.Position.y, v1.Position.x, v2.Position.y, v2.Position.x);
+    std::vector<float> h12 = Interpolate(v1.Position.y, v1.shadingCoefficient, v2.Position.y, v2.shadingCoefficient);
+
+    std::vector<float> x02 = Interpolate(v0.Position.y, v0.Position.x, v2.Position.y, v2.Position.x);
+    std::vector<float> h02 = Interpolate(v0.Position.y, v0.shadingCoefficient, v2.Position.y, v2.shadingCoefficient);
+
+    std::vector<float> x012(x01);
+    std::vector<float> h012(h01);
+
+    for(int i = 0 ; i < x12.size(); i++)
+    {
+        x012.push_back(x12[i]);
+        h012.push_back(h12[i]);
+    }
+
+    std::vector<float> x_left, x_right;
+    std::vector<float> h_left, h_right;
+    float m = x02.size()/2;
+    if(x02[m] < x012[m])
+    {
+        x_left = x02; x_right = x012;
+        h_left = h02; h_right = h012;
+    }
+    else
+    {
+        x_left = x012; x_right = x02;
+        h_left = h012; h_right = h02;
+    }
+
+    for(int y = v0.Position.y; y < v2.Position.y; y++)
+    {
+        float xl = x_left[y - v0.Position.y];
+        float xr = x_right[y - v0.Position.y];
+
+        std::vector<float> h_segment = Interpolate(xl, h_left[y - v0.Position.y], xr, h_right[y - v0.Position.y]);
+        for(int x = xl; x <= xr; x++)
+        {
+            PutPixel(x, y, h_segment[x-xl] * color);
+        }
+    }
+
+}
+
+void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
+{
+    if(p1.y < p0.y) { Swap(&p1, &p0); }
+    if(p2.y < p0.y) { Swap(&p2, &p0); }
+    if(p2.y < p1.y) { Swap(&p2, &p1); }
+
+    std::vector<float> x01 = Interpolate(p0.y, p0.x, p1.y, p1.x);
+    std::vector<float> x12 = Interpolate(p1.y, p1.x, p2.y, p2.x);
+    std::vector<float> x02 = Interpolate(p0.y, p0.x, p2.y, p2.x);
+
+    std::vector<float> x012(x01);
+    for(int i = 0; i < x12.size(); i++)
+        x012.push_back(x12[i]);
+
+    std::vector<float> x_left, x_right;
+    int m = x02.size()/2;
+    if(x02[m] < x012[m])
+    {
+        x_left = x02;
+        x_right = x012;
+    }
+    else
+    {
+        x_left = x012;
+        x_right = x02;
+    }
+    for(int y = p0.y; y <= p2.y; y++)
+    {
+        for(int x = x_left[y-p0.y]; x <= x_right[y - p0.y]; x++)
+        {
             PutPixel(x,y, color);
         }
     }
 
+}
+
+int main()
+{
+    for(int i = 0; i < CANVAS_H*CANVAS_W; i++)
+        canvasBuffer[i] = cgm::vec3f(255.0f);
+    /*cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
+    cg::Camera camera(cameraPosition);
+
+    cg::Canvas canvas(CANVAS_W, CANVAS_H, 1, 1);
+
+    cg::Scene mainScene;
+    mainScene.AddObjectToScene(Sphere(cgm::vec3f(0.0f, -1.0f, 3.0f),
+                                      cgm::vec3f(255.0f, 0.0f, 0.0f), 1.0f, 500, 0.2f));
+    mainScene.AddObjectToScene(Sphere(cgm::vec3f(2.0f,  0.0f, 4.0f),
+                                      cgm::vec3f(0.0f,   0.0f, 255.0f), 1.0f, 500, 0.3f));
+    mainScene.AddObjectToScene(Sphere(cgm::vec3f(-2.0f, 0.0f, 4.0f),
+                                      cgm::vec3f(0.0f, 255.0f, 0.0f), 1.0f, 10, 0.4f));
+    mainScene.AddObjectToScene(Sphere(cgm::vec3f(0.0f, -5001.0f, 0.0f),
+                                      cgm::vec3f(255.0f, 255.0f, 0.0f), 5000.0f, 1000, 0.5f));
+
+    mainScene.AddLightToScene(Light(cgm::vec3f(), cgm::vec3f(), 0.2f, AMBIENT));
+    mainScene.AddLightToScene(Light(cgm::vec3f(2.0f, 1.0f, 0.0f), cgm::vec3f(), 0.6f, POINT));
+    mainScene.AddLightToScene( Light(cgm::vec3f(), cgm::vec3f(1.0f, 4.0f, 4.0f), 0.2f, DIRECTIONAL));
+
+    cg::Ray ray(mainScene._sceneSpheres, mainScene._sceneLights, &camera.cameraPosition);
+
+    mainScene.DrawScene(canvas, camera, ray, RECURSION_DEPTH);
+
+    canvas.GenerateImage("FinalImage");*/
+    cgm::vec3f p0(-200.0f, -250.0f, 0.0f);
+    cgm::vec3f p1(200.0f, 50.0f, 0.0f);
+    cgm::vec3f p2(20.0f, 250.0f, 0.0f);
+    cgm::vec3f black(0.0f);
+    cgm::vec3f green(0.0f, 255.0f, 0.0f);
+
+    Vertex v0(p0, 0.3f);
+    Vertex v1(p1, 0.1f);
+    Vertex v2(p2, 1.0f);
+
+    DrawShadedTriangle(v0, v1, v2, green);
+
+    //DrawFilledTriangle(p0, p1, p2, green);
+    //DrawWireFrameTriangle(p0, p1, p2, black);
+
     std::ofstream ofs;
-    ofs.open("./output.ppm");
+    ofs.open("./Raster.ppm");
     ofs << "P3\n" << CANVAS_W << " " << CANVAS_H << "\n255\n";
 
     for(int x = 0; x < CANVAS_W; x++)
@@ -240,6 +242,7 @@ int main()
     }
 
     ofs.close();
-    std::cout << "DONE" << "\n";
+    std::cout << "DONE " << "\n";
+
     return 0;
 }
