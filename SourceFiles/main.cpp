@@ -6,6 +6,24 @@
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
+class Vertex
+{
+public:
+    cgm::vec3f Position;
+    float shadingCoefficient;
+
+    Vertex(const cgm::vec3f &vPosition, const float h)
+        : Position(vPosition), shadingCoefficient(h) {}
+};
+
+template<typename T>
+void Swap(T *p0, T *p1)
+{
+    T tmp = *p0;
+    *p0 = *p1;
+    *p1 = tmp;
+}
+
 void PutPixel(float x, float y, cgm::vec3f color)
 {
     x = CANVAS_W/2 + floor(x);
@@ -70,17 +88,64 @@ void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
     }
 }
 
-void Swap(cgm::vec3f *p0, cgm::vec3f *p1)
-{
-    cgm::vec3f tmp = *p0;
-    *p0 = *p1;
-    *p1 = tmp;
-}
+
+
 void DrawWireFrameTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
 {
     DrawLine(p0, p1, color);
     DrawLine(p1, p2, color);
     DrawLine(p0, p2, color);
+}
+void DrawShadedTriangle(Vertex &v0, Vertex &v1, Vertex &v2, cgm::vec3f &color)
+{
+    if(v1.Position.y < v0.Position.y) { Swap(&v0, &v1); }
+    if(v2.Position.y < v0.Position.y) { Swap(&v0, &v2); }
+    if(v2.Position.y < v1.Position.y) { Swap(&v2, &v1); }
+
+    std::vector<float> x01 = Interpolate(v0.Position.y, v0.Position.x, v1.Position.y, v1.Position.x);
+    std::vector<float> h01 = Interpolate(v0.Position.y, v0.shadingCoefficient, v1.Position.y, v1.shadingCoefficient);
+
+    std::vector<float> x12 = Interpolate(v1.Position.y, v1.Position.x, v2.Position.y, v2.Position.x);
+    std::vector<float> h12 = Interpolate(v1.Position.y, v1.shadingCoefficient, v2.Position.y, v2.shadingCoefficient);
+
+    std::vector<float> x02 = Interpolate(v0.Position.y, v0.Position.x, v2.Position.y, v2.Position.x);
+    std::vector<float> h02 = Interpolate(v0.Position.y, v0.shadingCoefficient, v2.Position.y, v2.shadingCoefficient);
+
+    std::vector<float> x012(x01);
+    std::vector<float> h012(h01);
+
+    for(int i = 0 ; i < x12.size(); i++)
+    {
+        x012.push_back(x12[i]);
+        h012.push_back(h12[i]);
+    }
+
+    std::vector<float> x_left, x_right;
+    std::vector<float> h_left, h_right;
+    float m = x02.size()/2;
+    if(x02[m] < x012[m])
+    {
+        x_left = x02; x_right = x012;
+        h_left = h02; h_right = h012;
+    }
+    else
+    {
+        x_left = x012; x_right = x02;
+        h_left = h012; h_right = h02;
+    }
+
+    for(int y = v0.Position.y; y < v2.Position.y; y++)
+    {
+        float xl = x_left[y - v0.Position.y];
+        float xr = x_right[y - v0.Position.y];
+
+        std::vector<float> h_segment = Interpolate(xl, h_left[y - v0.Position.y], xr, h_right[y - v0.Position.y]);
+        for(int x = xl; x <= xr; x++)
+        {
+            PutPixel(x, y, h_segment[x-xl] * color);
+        }
+    }
+
 }
 
 void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
@@ -153,8 +218,14 @@ int main()
     cgm::vec3f black(0.0f);
     cgm::vec3f green(0.0f, 255.0f, 0.0f);
 
-    DrawFilledTriangle(p0, p1, p2, green);
-    DrawWireFrameTriangle(p0, p1, p2, black);
+    Vertex v0(p0, 0.3f);
+    Vertex v1(p1, 0.1f);
+    Vertex v2(p2, 1.0f);
+
+    DrawShadedTriangle(v0, v1, v2, green);
+
+    //DrawFilledTriangle(p0, p1, p2, green);
+    //DrawWireFrameTriangle(p0, p1, p2, black);
 
     std::ofstream ofs;
     ofs.open("./Raster.ppm");
