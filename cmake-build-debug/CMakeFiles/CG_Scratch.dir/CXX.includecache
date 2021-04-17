@@ -1,0 +1,64 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../Headers/Camera.h
+custom_math.h
+../Headers/custom_math.h
+
+../Headers/Canvas.h
+custom_math.h
+../Headers/custom_math.h
+iostream
+-
+fstream
+-
+string
+-
+
+../Headers/Light.h
+
+../Headers/Ray.h
+custom_math.h
+../Headers/custom_math.h
+Sphere.h
+../Headers/Sphere.h
+Light.h
+../Headers/Light.h
+vector
+-
+
+../Headers/Scene.h
+iostream
+-
+vector
+-
+Sphere.h
+../Headers/Sphere.h
+Light.h
+../Headers/Light.h
+Canvas.h
+../Headers/Canvas.h
+Camera.h
+../Headers/Camera.h
+Ray.h
+../Headers/Ray.h
+
+../Headers/Sphere.h
+custom_math.h
+../Headers/custom_math.h
+
+../Headers/custom_math.h
+cmath
+-
+ostream
+-
+
+D:/Education/C C++/CG-Scratch/SourceFiles/main.cpp
+Scene.h
+D:/Education/C C++/CG-Scratch/SourceFiles/Scene.h
+
