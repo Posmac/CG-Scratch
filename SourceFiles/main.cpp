@@ -1,7 +1,7 @@
 #include "Scene.h"
 
-#define CANVAS_W 256
-#define CANVAS_H 256
+#define CANVAS_W 1024
+#define CANVAS_H 1024
 #define RECURSION_DEPTH 6
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
@@ -70,6 +70,55 @@ void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
     }
 }
 
+void Swap(cgm::vec3f *p0, cgm::vec3f *p1)
+{
+    cgm::vec3f tmp = *p0;
+    *p0 = *p1;
+    *p1 = tmp;
+}
+void DrawWireFrameTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
+{
+    DrawLine(p0, p1, color);
+    DrawLine(p1, p2, color);
+    DrawLine(p0, p2, color);
+}
+
+void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
+{
+    if(p1.y < p0.y) { Swap(&p1, &p0); }
+    if(p2.y < p0.y) { Swap(&p2, &p0); }
+    if(p2.y < p1.y) { Swap(&p2, &p1); }
+
+    std::vector<float> x01 = Interpolate(p0.y, p0.x, p1.y, p1.x);
+    std::vector<float> x12 = Interpolate(p1.y, p1.x, p2.y, p2.x);
+    std::vector<float> x02 = Interpolate(p0.y, p0.x, p2.y, p2.x);
+
+    std::vector<float> x012(x01);
+    for(int i = 0; i < x12.size(); i++)
+        x012.push_back(x12[i]);
+
+    std::vector<float> x_left, x_right;
+    int m = x02.size()/2;
+    if(x02[m] < x012[m])
+    {
+        x_left = x02;
+        x_right = x012;
+    }
+    else
+    {
+        x_left = x012;
+        x_right = x02;
+    }
+    for(int y = p0.y; y <= p2.y; y++)
+    {
+        for(int x = x_left[y-p0.y]; x <= x_right[y - p0.y]; x++)
+        {
+            PutPixel(x,y, color);
+        }
+    }
+
+}
+
 int main()
 {
     for(int i = 0; i < CANVAS_H*CANVAS_W; i++)
@@ -98,14 +147,14 @@ int main()
     mainScene.DrawScene(canvas, camera, ray, RECURSION_DEPTH);
 
     canvas.GenerateImage("FinalImage");*/
-    cgm::vec3f p1(-200.0f, -100.0f, 0.0f);
-    cgm::vec3f p2(240.0f, 120.0f, 0.0f);
-    cgm::vec3f p3(-50.0f, -200.0f, 0.0f);
-    cgm::vec3f p4(60.0f, 240.0f, 0.0f);
-    cgm::vec3f color(0.0f);
+    cgm::vec3f p0(-200.0f, -250.0f, 0.0f);
+    cgm::vec3f p1(200.0f, 50.0f, 0.0f);
+    cgm::vec3f p2(20.0f, 250.0f, 0.0f);
+    cgm::vec3f black(0.0f);
+    cgm::vec3f green(0.0f, 255.0f, 0.0f);
 
-    DrawLine(p1, p2, color);
-    DrawLine(p3, p4, color);
+    DrawFilledTriangle(p0, p1, p2, green);
+    DrawWireFrameTriangle(p0, p1, p2, black);
 
     std::ofstream ofs;
     ofs.open("./Raster.ppm");
