@@ -1,8 +1,19 @@
 #include "Scene.h"
 
-#define CANVAS_W 1024
-#define CANVAS_H 1024
+
+
+#define CANVAS_W 512
+#define CANVAS_H 512
 #define RECURSION_DEPTH 6
+
+//colors
+cgm::vec3f red(255.0f, 0.0f, 0.0f);
+cgm::vec3f green(0.0, 255.0f, 0.0f);
+cgm::vec3f blue(0.0f, 0.0f, 255.0f);
+cgm::vec3f black (0.0f);
+
+float viewPortSize = 1;
+float projectionPlaneDistance = 1;
 
 cgm::vec3f *canvasBuffer = new cgm::vec3f[CANVAS_W * CANVAS_H];
 
@@ -15,6 +26,17 @@ public:
     Vertex(const cgm::vec3f &vPosition, const float h)
         : Position(vPosition), shadingCoefficient(h) {}
 };
+
+cgm::vec3f ViewportToCanvas(cgm::vec3f &v)
+{
+    return cgm::vec3f(v.x*CANVAS_W/viewPortSize, v.y*CANVAS_H/viewPortSize, v.z);
+}
+
+cgm::vec3f ProjectVertex(cgm::vec3f &v)
+{
+    cgm::vec3f temp = cgm::vec3f(v.x*projectionPlaneDistance/v.z, v.y*projectionPlaneDistance/v.z, v.z);
+    return ViewportToCanvas(temp);
+}
 
 template<typename T>
 void Swap(T *p0, T *p1)
@@ -61,31 +83,30 @@ void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
     if(std::abs(dx) > std::abs(dy))
     {
         if(dx < 0)
-        {
-            cgm::vec3f tmp = p0;
-            p0 = p1;
-            p1 = tmp;
-        }
+            Swap(&p0, &p1);
+
         std::vector<float> ys = Interpolate(p0.x, p0.y, p1.x, p1.y);
         for(int x = p0.x ; x <= p1.x; x++)
         {
-            PutPixel(x, ys[x - p0.x], color);
+            int yy = std::floor(x - p0.x);
+            PutPixel(x, ys[yy], color);
         }
     }
     else
     {
         if(dy < 0)
-        {
-            cgm::vec3f tmp = p0;
-            p0 = p1;
-            p1 = tmp;
-        }
+            Swap(&p0, &p1);
+
         std::vector<float> xs = Interpolate(p0.y, p0.x, p1.y, p1.x);
         for(int y = p0.y ; y <= p1.y; y++)
         {
-            PutPixel(xs[y - p0.y], y, color);
+            int xx = std::floor(y-p0.y);
+            PutPixel(xs[xx], y, color);
         }
     }
+    //return normal swapping
+    if(dx < 0 || dy<0)
+        Swap(&p0, &p1);
 }
 
 
@@ -212,20 +233,41 @@ int main()
     mainScene.DrawScene(canvas, camera, ray, RECURSION_DEPTH);
 
     canvas.GenerateImage("FinalImage");*/
-    cgm::vec3f p0(-200.0f, -250.0f, 0.0f);
-    cgm::vec3f p1(200.0f, 50.0f, 0.0f);
-    cgm::vec3f p2(20.0f, 250.0f, 0.0f);
-    cgm::vec3f black(0.0f);
-    cgm::vec3f green(0.0f, 255.0f, 0.0f);
 
-    Vertex v0(p0, 0.3f);
-    Vertex v1(p1, 0.1f);
-    Vertex v2(p2, 1.0f);
+    cgm::vec3f vA(-2.0f, -0.5f, 5.0f);
+    cgm::vec3f vB(-2.0f, 0.5f, 5.0f);
+    cgm::vec3f vC(-1.0f, 0.5f, 5.0f);
+    cgm::vec3f vD(-1.0f, -0.5f, 5.0f);
 
-    DrawShadedTriangle(v0, v1, v2, green);
+    cgm::vec3f vAb(-2.0f, -0.5f, 6.0f);
+    cgm::vec3f vBb(-2.0f, 0.5f, 6.0f);
+    cgm::vec3f vCb(-1.0f, 0.5f, 6.0f);
+    cgm::vec3f vDb(-1.0f, -0.5f, 6.0f);
 
-    //DrawFilledTriangle(p0, p1, p2, green);
-    //DrawWireFrameTriangle(p0, p1, p2, black);
+    vA = ProjectVertex(vA);
+    vB = ProjectVertex(vB);
+    vC = ProjectVertex(vC);
+    vD = ProjectVertex(vD);
+
+    vAb = ProjectVertex(vAb);
+    vBb = ProjectVertex(vBb);
+    vCb = ProjectVertex(vCb);
+    vDb = ProjectVertex(vDb);
+
+    DrawLine(vA, vB, red);
+    DrawLine(vB, vC, red);
+    DrawLine(vC, vD, red);
+    DrawLine(vD, vA, red);
+
+    DrawLine(vAb, vBb, blue);
+    DrawLine(vBb, vCb, blue);
+    DrawLine(vCb, vDb, blue);
+    DrawLine(vDb, vAb, blue);
+
+    DrawLine(vAb, vA, green);
+    DrawLine(vBb, vB, green);
+    DrawLine(vCb, vC, green);
+    DrawLine(vDb, vD, green);
 
     std::ofstream ofs;
     ofs.open("./Raster.ppm");
