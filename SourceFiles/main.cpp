@@ -330,6 +330,15 @@ int main()
    };
 
     Model cube(vertices, triangles);
+
+    cgm::Matrix4x4f model = cgm::Matrix4x4f(1.0f);
+    model.translate(model, cgm::vec3f(2.0f, 0.0f, 1.0f));
+    model.rotate(model, 45.0f);
+    model.scale(model, cgm::vec3f(0.4f, 1.0f, 2.0f));
+
+    for(int i = 0; i < vertices.size(); i++)
+        model.mulVectorMatrix(vertices[i].Position);
+
     RenderModel(cube);
 
 #ifdef TestCube
