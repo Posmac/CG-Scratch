@@ -2,15 +2,21 @@
 
 
 
-#define CANVAS_W 512
-#define CANVAS_H 512
+#define CANVAS_W 1024
+#define CANVAS_H 1024
 #define RECURSION_DEPTH 6
 
 //colors
 cgm::vec3f red(255.0f, 0.0f, 0.0f);
 cgm::vec3f green(0.0, 255.0f, 0.0f);
 cgm::vec3f blue(0.0f, 0.0f, 255.0f);
+cgm::vec3f yellow(255.0f, 255.0f, 0.0f);
+cgm::vec3f purple(255.0f, 0.0f, 255.0f);
+cgm::vec3f cyan(0.0f, 255.0f, 255.0f);
 cgm::vec3f black (0.0f);
+cgm::vec3f white (255.0f);
+
+
 
 float viewPortSize = 1;
 float projectionPlaneDistance = 1;
@@ -21,10 +27,44 @@ class Vertex
 {
 public:
     cgm::vec3f Position;
+    cgm::vec3f Color;
     float shadingCoefficient;
+    Vertex() : Position(cgm::vec3f(0.0f)),
+                        Color(cgm::vec3f(0.0f)), shadingCoefficient(0.0f) {};
 
-    Vertex(const cgm::vec3f &vPosition, const float h)
-        : Position(vPosition), shadingCoefficient(h) {}
+    Vertex(const cgm::vec3f &vPosition, const float h, const cgm::vec3f col)
+        : Position(vPosition), shadingCoefficient(h), Color(col) {};
+};
+
+class Triangle
+{
+public:
+    int vertexIndices[3];
+    Triangle(const int &v1, const int &v2, const int &v3 )
+    {
+        vertexIndices[0] = v1;
+        vertexIndices[1] = v2;
+        vertexIndices[2] = v3;
+    }
+};
+
+
+class Model
+{
+public:
+    std::vector<Vertex> *vertices;
+    std::vector<Triangle> *triangles;
+    Model(std::vector<Vertex> &verts, std::vector<Triangle> &tris)
+        : vertices(&verts), triangles(&tris){};
+};
+
+class Camera
+{
+public:
+    cgm::vec3f Position;
+    cgm::vec3f Orientation;
+    Camera(cgm::vec3f &pos, cgm::vec3f &orient)
+        : Position(pos), Orientation(orient)  {};
 };
 
 cgm::vec3f ViewportToCanvas(cgm::vec3f &v)
@@ -88,7 +128,7 @@ void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
         std::vector<float> ys = Interpolate(p0.x, p0.y, p1.x, p1.y);
         for(int x = p0.x ; x <= p1.x; x++)
         {
-            int yy = std::floor(x - p0.x);
+            int yy = std::max(0.0f, std::floor(x - p0.x));
             PutPixel(x, ys[yy], color);
         }
     }
@@ -100,7 +140,7 @@ void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
         std::vector<float> xs = Interpolate(p0.y, p0.x, p1.y, p1.x);
         for(int y = p0.y ; y <= p1.y; y++)
         {
-            int xx = std::floor(y-p0.y);
+            int xx = std::max(0.0f, std::floor(y-p0.y));
             PutPixel(xs[xx], y, color);
         }
     }
@@ -117,6 +157,7 @@ void DrawWireFrameTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::
     DrawLine(p1, p2, color);
     DrawLine(p0, p2, color);
 }
+
 void DrawShadedTriangle(Vertex &v0, Vertex &v1, Vertex &v2, cgm::vec3f &color)
 {
     if(v1.Position.y < v0.Position.y) { Swap(&v0, &v1); }
@@ -202,14 +243,33 @@ void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec
             PutPixel(x,y, color);
         }
     }
-
 }
+
+
+void RenderModel(Model &model)
+{
+    std::vector<cgm::vec3f> projected;
+    for(int i = 0; i < model.vertices->size(); i++)
+    {
+        projected.push_back(ProjectVertex((*model.vertices)[i].Position));
+    }
+
+    for(int i = 0; i < model.triangles->size(); i++)
+    {
+        Triangle tr = (*model.triangles)[i];
+        DrawWireFrameTriangle(projected[tr.vertexIndices[0]],projected[tr.vertexIndices[1]],
+            projected[tr.vertexIndices[2]], (*model.vertices)[tr.vertexIndices[0]].Color);
+    }
+}
+
 
 int main()
 {
     for(int i = 0; i < CANVAS_H*CANVAS_W; i++)
         canvasBuffer[i] = cgm::vec3f(255.0f);
-    /*cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
+
+#ifdef RT
+    cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
     cg::Camera camera(cameraPosition);
 
     cg::Canvas canvas(CANVAS_W, CANVAS_H, 1, 1);
@@ -232,8 +292,47 @@ int main()
 
     mainScene.DrawScene(canvas, camera, ray, RECURSION_DEPTH);
 
-    canvas.GenerateImage("FinalImage");*/
+    canvas.GenerateImage("FinalImage");
+#endif //RT
 
+    std::vector<Vertex> vertices = std::vector<Vertex>
+    {
+            Vertex(cgm::vec3f(1.0f,1.0f,1.0f), 1.0f, red),
+            Vertex(cgm::vec3f(-1.0f,1.0f,1.0f), 1.0f, green),
+            Vertex(cgm::vec3f(-1.0f,-1.0f,1.0f), 1.0f, blue),
+            Vertex(cgm::vec3f(1.0f,-1.0f,1.0f), 1.0f, black),
+            Vertex(cgm::vec3f(1.0f,1.0f,-1.0f), 1.0f, cyan),
+            Vertex(cgm::vec3f(-1.0f,1.0f,-1.0f), 1.0f, purple),
+            Vertex(cgm::vec3f(-1.0f,-1.0f,-1.0f), 1.0f, yellow),
+            Vertex(cgm::vec3f(1.0f,-1.0f,-1.0f), 1.0f, white),
+    };
+
+    for(int i = 0; i < 8; i++)
+    {
+        vertices[i].Position.z += 10.0f;
+        vertices[i].Position.x -= 2.0f;
+    }
+
+   std::vector<Triangle> triangles = std::vector<Triangle>
+   {
+            Triangle(0, 1, 2),
+            Triangle(0, 2, 3),
+            Triangle(4, 0, 3),
+            Triangle(4, 3, 7),
+            Triangle(5, 4, 7),
+            Triangle(5, 7, 6),
+            Triangle(1, 5, 6),
+            Triangle(1, 6, 2),
+            Triangle(4, 5, 1),
+            Triangle(4, 1, 0),
+            Triangle(2, 6, 7),
+            Triangle(2, 7, 3),
+   };
+
+    Model cube(vertices, triangles);
+    RenderModel(cube);
+
+#ifdef TestCube
     cgm::vec3f vA(-2.0f, -0.5f, 5.0f);
     cgm::vec3f vB(-2.0f, 0.5f, 5.0f);
     cgm::vec3f vC(-1.0f, 0.5f, 5.0f);
@@ -268,6 +367,7 @@ int main()
     DrawLine(vBb, vB, green);
     DrawLine(vCb, vC, green);
     DrawLine(vDb, vD, green);
+#endif
 
     std::ofstream ofs;
     ofs.open("./Raster.ppm");
