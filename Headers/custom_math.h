@@ -281,33 +281,33 @@ namespace cgm {
             return {e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16};
         }
 
-        Matrix4x4 translate(Matrix4x4<T> &m, cgm::vec3<T> &translation)
+        Matrix4x4 translate(Matrix4x4<T> &m, const cgm::vec3<T> &translation)
         {
-           Matrix4x4<T> t = (1, 0, 0, translation.x,
-                             0, 1, 0, translation.y,
-                             0, 0, 1, translation.z,
-                             0, 0, 0, 1);
+           Matrix4x4<T> t (1, 0, 0, translation.x,
+                           0, 1, 0, translation.y,
+                           0, 0, 1, translation.z,
+                           0, 0, 0, 1);
            return m * t;
         }
 
-        Matrix4x4 scale(Matrix4x4<T> &m, cgm::vec3<T> &scale)
+        Matrix4x4 scale(Matrix4x4<T> &m,const cgm::vec3<T> &scale)
         {
-            Matrix4x4<T> t = (scale.x, 0,       0,          0,
+            Matrix4x4<T> t   (scale.x, 0,       0,          0,
                               0,       scale.y, 0,          0,
                               0,       0,       scale.z,    0,
                               0,       0,       0,          1);
             return m * t;
         }
 
-        Matrix4x4 rotate(Matrix4x4<T> &m, float angle)
+        Matrix4x4 rotateY(Matrix4x4<T> &m, float angle)
         {
             float cs = cos(angle * PI/180);
             float sn = cos(angle * PI/180);
 
-            Matrix4x4<T> t = (cs,  0,  -sn, 0,
-                              0,   1,  0,   0,
-                              sn,  0,  cs,  0,
-                              0,   0,  0,   1);
+            Matrix4x4<T> t(cs,  0,  -sn, 0,
+                           0,   1,  0,   0,
+                           sn,  0,  cs,  0,
+                           0,   0,  0,   1);
             return m * t;
         }
 
@@ -406,20 +406,15 @@ namespace cgm {
         template<typename S>
         vec3<S> mulVectorMatrix(const vec3<S> &src) const
         {
-            vec3<S> result;
+            T result[4] = {src.x, src.y, src.z, 1};
 
-            S a, b, c, w;
+            S a, b, c;
 
-            a = src[0] * e[0][0] + src[1] * e[1][0] + src[2] * e[2][0] + e[3][0];
-            b = src[0] * e[0][1] + src[1] * e[1][1] + src[2] * e[2][1] + e[3][1];
-            c = src[0] * e[0][2] + src[1] * e[1][2] + src[2] * e[2][2] + e[3][2];
-            w = src[0] * e[0][3] + src[1] * e[1][3] + src[2] * e[2][3] + e[3][3];
+            a = result[0] * e[0][0] + result[1] * e[0][1] + result[2] * e[0][2] + result[3] * e[0][3];
+            b = result[0] * e[1][0] + result[1] * e[1][1] + result[2] * e[1][2] + result[3] * e[1][3];
+            c = result[0] * e[2][0] + result[1] * e[2][1] + result[2] * e[2][2] + result[3] * e[2][3];
 
-            result.x = a / w;
-            result.y = b / w;
-            result.z = c / w;
-
-            return result;
+            return {a, b, c};
         }
 
 

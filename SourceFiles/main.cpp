@@ -2,10 +2,10 @@
 
 
 
-#define CANVAS_W 1024
-#define CANVAS_H 1024
+#define CANVAS_W 512
+#define CANVAS_H 512
 #define RECURSION_DEPTH 6
-
+#define RST
 //colors
 cgm::vec3f red(255.0f, 0.0f, 0.0f);
 cgm::vec3f green(0.0, 255.0f, 0.0f);
@@ -98,7 +98,27 @@ void PutPixel(float x, float y, cgm::vec3f color)
     canvasBuffer[number].y  = color.y;
     canvasBuffer[number].z  = color.z;
 }
+void GenerateImage()
+{
+    std::ofstream ofs;
+    ofs.open("./Raster.ppm");
+    ofs.clear();
+    ofs << "P3\n" << CANVAS_W << " " << CANVAS_H << "\n255\n";
 
+    for(int x = 0; x < CANVAS_W; x++)
+    {
+        for(int y = 0; y < CANVAS_H; y ++)
+        {
+            ofs << canvasBuffer[y * CANVAS_W + x].x << " "
+                << canvasBuffer[y * CANVAS_W + x].y << " "
+                << canvasBuffer[y * CANVAS_W + x].z << "\n";
+        }
+    }
+
+    ofs.close();
+    std::cout << "DONE " << "\n";
+
+}
 std::vector<float>& Interpolate(float i0,float d0, float i1, float d1)
 {
     std::vector<float> *values = new std::vector<float>;
@@ -118,35 +138,42 @@ std::vector<float>& Interpolate(float i0,float d0, float i1, float d1)
 }
 void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
 {
-    float dx = p1.x - p0.x;
-    float dy = p1.y - p0.y;
+    cgm::vec3f v0(p0);
+    cgm::vec3f v1(p1);
+
+    float dx = v1.x - v0.x;
+    float dy = v1.y - v0.y;
     if(std::abs(dx) > std::abs(dy))
     {
         if(dx < 0)
-            Swap(&p0, &p1);
+            Swap(&v0, &v1);
 
-        std::vector<float> ys = Interpolate(p0.x, p0.y, p1.x, p1.y);
-        for(int x = p0.x ; x <= p1.x; x++)
+        std::vector<float> ys = Interpolate(v0.x, v0.y, v1.x, v1.y);
+        for(int x = v0.x ; x <= v1.x; x++)
         {
-            int yy = std::max(0.0f, std::floor(x - p0.x));
+            int yy = std::max(0.0f, std::floor(x - v0.x));
+            if(yy >= ys.size()-1)
+                yy = ys.size()-1;
             PutPixel(x, ys[yy], color);
         }
     }
     else
     {
         if(dy < 0)
-            Swap(&p0, &p1);
+            Swap(&v0, &v1);
 
-        std::vector<float> xs = Interpolate(p0.y, p0.x, p1.y, p1.x);
-        for(int y = p0.y ; y <= p1.y; y++)
+        std::vector<float> xs = Interpolate(v0.y, v0.x, v1.y, v1.x);
+        for(int y = v0.y ; y <= v1.y; y++)
         {
-            int xx = std::max(0.0f, std::floor(y-p0.y));
+            int xx = std::max(0.0f, std::floor(y-v0.y));
+            if(xx >= xs.size()-1)
+                xx = xs.size()-1;
             PutPixel(xs[xx], y, color);
         }
     }
     //return normal swapping
-    if(dx < 0 || dy<0)
-        Swap(&p0, &p1);
+    if(dx < 0 || dy < 0)
+        Swap(&v0, &v1);
 }
 
 
@@ -268,7 +295,7 @@ int main()
     for(int i = 0; i < CANVAS_H*CANVAS_W; i++)
         canvasBuffer[i] = cgm::vec3f(255.0f);
 
-#ifdef RT
+#ifdef RT //Raytraces
     cgm::vec3f cameraPosition(3.0f, 0.0f, 1.0f);
     cg::Camera camera(cameraPosition);
 
@@ -295,6 +322,7 @@ int main()
     canvas.GenerateImage("FinalImage");
 #endif //RT
 
+#ifdef RST //Rasterizer
     std::vector<Vertex> vertices = std::vector<Vertex>
     {
             Vertex(cgm::vec3f(1.0f,1.0f,1.0f), 1.0f, red),
@@ -306,12 +334,6 @@ int main()
             Vertex(cgm::vec3f(-1.0f,-1.0f,-1.0f), 1.0f, yellow),
             Vertex(cgm::vec3f(1.0f,-1.0f,-1.0f), 1.0f, white),
     };
-
-    for(int i = 0; i < 8; i++)
-    {
-        vertices[i].Position.z += 10.0f;
-        vertices[i].Position.x -= 2.0f;
-    }
 
    std::vector<Triangle> triangles = std::vector<Triangle>
    {
@@ -330,18 +352,39 @@ int main()
    };
 
     Model cube(vertices, triangles);
-
     cgm::Matrix4x4f model = cgm::Matrix4x4f(1.0f);
-    model.translate(model, cgm::vec3f(2.0f, 0.0f, 1.0f));
-    model.rotate(model, 45.0f);
-    model.scale(model, cgm::vec3f(0.4f, 1.0f, 2.0f));
 
+    model = model.translate(model, cgm::vec3f(-1.0f, 0.0f, 5.0f));
+    model = model.rotateY(model, 45.0f);
+    model = model.scale(model, cgm::vec3f(0.4f, 1.0f, 2.0f));
+
+
+    std::vector<Vertex> transformedVertex(vertices);
     for(int i = 0; i < vertices.size(); i++)
-        model.mulVectorMatrix(vertices[i].Position);
-
+    {
+        transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
+    }
+    cube.vertices = &transformedVertex;
     RenderModel(cube);
 
-#ifdef TestCube
+
+    model = cgm::Matrix4x4f(1.0f);
+    model = model.translate(model, cgm::vec3f(1.5f, 0.2f, 10.0f));
+    //model = model.rotateY(model, -10.0f);
+    model = model.scale(model, cgm::vec3f(1.0f, 1.0f, 1.0f));
+
+    transformedVertex = std::vector<Vertex>(vertices);
+    for(int i = 0; i < vertices.size(); i++)
+    {
+        transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
+    }
+    cube.vertices = &transformedVertex;
+    RenderModel(cube);
+
+
+#endif //RST
+
+#ifdef TestCube //For tests, will be cleaned after book completing
     cgm::vec3f vA(-2.0f, -0.5f, 5.0f);
     cgm::vec3f vB(-2.0f, 0.5f, 5.0f);
     cgm::vec3f vC(-1.0f, 0.5f, 5.0f);
@@ -377,23 +420,6 @@ int main()
     DrawLine(vCb, vC, green);
     DrawLine(vDb, vD, green);
 #endif
-
-    std::ofstream ofs;
-    ofs.open("./Raster.ppm");
-    ofs << "P3\n" << CANVAS_W << " " << CANVAS_H << "\n255\n";
-
-    for(int x = 0; x < CANVAS_W; x++)
-    {
-        for(int y = 0; y < CANVAS_H; y ++)
-        {
-            ofs << canvasBuffer[y * CANVAS_W + x].x << " "
-                << canvasBuffer[y * CANVAS_W + x].y << " "
-                << canvasBuffer[y * CANVAS_W + x].z << "\n";
-        }
-    }
-
-    ofs.close();
-    std::cout << "DONE " << "\n";
-
+    GenerateImage();
     return 0;
 }

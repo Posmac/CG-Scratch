@@ -58,26 +58,6 @@ cmath
 ostream
 -
 
-C:/Own/CG_Scratch/SourceFiles/Camera.cpp
-Camera.h
-C:/Own/CG_Scratch/SourceFiles/Camera.h
-
-C:/Own/CG_Scratch/SourceFiles/Canvas.cpp
-Canvas.h
-C:/Own/CG_Scratch/SourceFiles/Canvas.h
-
-C:/Own/CG_Scratch/SourceFiles/Ray.cpp
-limits
--
-Ray.h
-C:/Own/CG_Scratch/SourceFiles/Ray.h
-
-C:/Own/CG_Scratch/SourceFiles/Scene.cpp
-limits
--
-Scene.h
-C:/Own/CG_Scratch/SourceFiles/Scene.h
-
 C:/Own/CG_Scratch/SourceFiles/main.cpp
 Scene.h
 C:/Own/CG_Scratch/SourceFiles/Scene.h
