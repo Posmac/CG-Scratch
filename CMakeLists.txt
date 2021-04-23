@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 include_directories(Headers)
+include_directories(Headers/glm)
 include_directories(SourceFiles)
 include_directories(ImportedImages)
 
