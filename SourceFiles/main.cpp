@@ -62,8 +62,8 @@ class Camera
 {
 public:
     cgm::vec3f Position;
-    cgm::vec3f Orientation;
-    Camera(cgm::vec3f &pos, cgm::vec3f &orient)
+    float Orientation;
+    Camera(const cgm::vec3f &pos, float orient)
         : Position(pos), Orientation(orient)  {};
 };
 
@@ -352,13 +352,26 @@ int main()
    };
 
     Model cube(vertices, triangles);
+    Camera camera(cgm::vec3f(-5.0f, 1.0f, 2.0f), 0.0f);
+    cgm::Matrix4x4f view(1.0f);
+
+    view = view.rotateY(view, camera.Orientation);
+    view.transpose();
+
+    cgm::Matrix4x4f translation (1.0f);
+
+    translation = translation.translate(translation, camera.Position * -1.0f);
+    translation.transpose();
+
+    view = view * translation;
+
     cgm::Matrix4x4f model = cgm::Matrix4x4f(1.0f);
 
-    model = model.translate(model, cgm::vec3f(-1.0f, 0.0f, 5.0f));
-    model = model.rotateY(model, 45.0f);
-    model = model.scale(model, cgm::vec3f(0.4f, 1.0f, 2.0f));
-
-
+    model = cgm::Matrix4x4f(1.0f);
+    model = model.translate(model, cgm::vec3f(-1.5f, 0.0f, 7.0f));
+    //model = model.rotateY(model, 45.0f);
+    model = model.scale(model, cgm::vec3f(0.75f));
+    model = view * model;
     std::vector<Vertex> transformedVertex(vertices);
     for(int i = 0; i < vertices.size(); i++)
     {
@@ -369,10 +382,12 @@ int main()
 
 
     model = cgm::Matrix4x4f(1.0f);
-    model = model.translate(model, cgm::vec3f(1.5f, 0.2f, 10.0f));
-    //model = model.rotateY(model, -10.0f);
-    model = model.scale(model, cgm::vec3f(1.0f, 1.0f, 1.0f));
+    model = model.translate(model, cgm::vec3f(1.25f, 2.5f, 7.5f));
+    model = model.rotateY(model, 195.0f);
+    //model = model.scale(model, cgm::vec3f(1.0f, 1.0f, 1.0f));
+    model = view * model;
 
+    transformedVertex.clear();
     transformedVertex = std::vector<Vertex>(vertices);
     for(int i = 0; i < vertices.size(); i++)
     {
