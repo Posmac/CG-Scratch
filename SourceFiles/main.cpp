@@ -1,7 +1,6 @@
 #include "Scene.h"
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
 #define CANVAS_W 512
 #define CANVAS_H 512
 #define RECURSION_DEPTH 6
@@ -352,7 +351,7 @@ int main()
    };
 
     Model cube(vertices, triangles);
-    Camera camera(glm::vec3(-3.0f, 1.5f, 2.0f), 30.0f);
+    Camera camera(glm::vec3(-3.0f, 1.0f, 2.0f), 00.0f);
     glm::mat4x4 view (1.0f);
     glm::mat4x4 translation (1.0f);
 
@@ -360,12 +359,12 @@ int main()
     view = glm::transpose(view);
 
     translation = glm::translate(translation, camera.Position * -1.0f);
-    //translation = glm::transpose(translation);
+    translation =  glm::transpose(translation);
 
     view = view * translation;
 
-    glm::mat4x4 model = glm::mat4x4(1.0f);
-    model = glm::mat4x4(1.0f);
+    glm::mat4x4 model = glm::mat4x4 (1.0f);
+    model = glm::mat4x4 (1.0f);
     model = glm::translate(model, glm::vec3(-1.5f, 0.0f, 7.0f));
     model = glm::scale(model, glm::vec3(0.75f));
 
@@ -375,15 +374,15 @@ int main()
     for(int i = 0; i < vertices.size(); i++)
     {
         glm::vec4 v4(vertices[i].Position, 1.0f);
-        transformedVertex[i].Position = model * v4;
+        transformedVertex[i].Position = model*v4;
     }
     cube.vertices = &transformedVertex;
     RenderModel(cube);
 
 
-    model = glm::mat4x4(1.0f);
+    model = glm::mat4x4 (1.0f);
     model = glm::translate(model, glm::vec3(1.25f, 2.5f, 7.5f));
-    model = glm::rotate(model,  glm::radians(45.0f) ,glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model,  glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(1.0f));
 
     model = view * model;
@@ -393,7 +392,7 @@ int main()
     for(int i = 0; i < vertices.size(); i++)
     {
         glm::vec4 v4(vertices[i].Position, 1.0f);
-        transformedVertex[i].Position = model * v4;
+        transformedVertex[i].Position = model*v4;
     }
     cube.vertices = &transformedVertex;
     RenderModel(cube);

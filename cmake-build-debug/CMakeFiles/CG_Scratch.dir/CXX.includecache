@@ -1151,7 +1151,7 @@ detail/func_vector_relational.inl
 C:/Own/CG_Scratch/SourceFiles/main.cpp
 Scene.h
 C:/Own/CG_Scratch/SourceFiles/Scene.h
-glm.hpp
+glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
 -
