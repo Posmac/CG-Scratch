@@ -381,7 +381,6 @@ int main()
     cube.vertices = &transformedVertex;
     RenderModel(cube);
 
-
 #endif //RST
 
 #ifdef TestCube //For tests, will be cleaned after book completing
