@@ -47,14 +47,26 @@ public:
     }
 };
 
+class Plane
+{
+public:
+    cgm::vec3f normal;
+    float distance;
+    Plane(const cgm::vec3f &pNormal, const float pDistance)
+        : normal(pNormal), distance(pDistance)  {}
+};
 
 class Model
 {
 public:
     std::vector<Vertex> *vertices;
     std::vector<Triangle> *triangles;
-    Model(std::vector<Vertex> &verts, std::vector<Triangle> &tris)
-        : vertices(&verts), triangles(&tris){};
+    cgm::vec3f center;
+    float radius;
+
+    Model(std::vector<Vertex> &verts, std::vector<Triangle> &tris, const cgm::vec3f mCenter, float mRadius)
+        : vertices(&verts), triangles(&tris), center(mCenter), radius(mRadius){};
+    Model();
 };
 
 class Camera
@@ -62,8 +74,10 @@ class Camera
 public:
     cgm::vec3f Position;
     float Orientation;
+    std::vector<Plane> *clippingPlanes;
+
     Camera(const cgm::vec3f &pos, float orient)
-        : Position(pos), Orientation(orient)  {};
+        : Position(pos), Orientation(orient))  {};
 };
 
 cgm::vec3f ViewportToCanvas(cgm::vec3f &v)
@@ -175,7 +189,74 @@ void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
         Swap(&v0, &v1);
 }
 
+void ClipTriangle(Triangle triangle, Plane plane, std::vector<Triangle> *triangles, std::vector<Vertex> *vertices)
+{
+    Vertex v0 = (*vertices)[triangle.vertexIndices[0]];
+    Vertex v1 = (*vertices)[triangle.vertexIndices[1]];
+    Vertex v2 = (*vertices)[triangle.vertexIndices[2]];
 
+    bool in0 = plane.normal.dot(v0.Position) + plane.distance > 0;
+    bool in1 = plane.normal.dot(v1.Position) + plane.distance > 0;
+    bool in2 = plane.normal.dot(v2.Position) + plane.distance > 0;
+
+    int count = in0 + in1 + in2;
+    if(count == 0)
+    {
+
+    }
+    else if(count == 3)
+    {
+        triangles->push_back(triangle);
+    }
+    else if(count == 2)
+    {
+
+    }
+    else if(count == 1)
+    {
+
+    }
+}
+
+Model* TransformAndClip(Plane *clippingPlanes, Model *model, cgm::Matrix4x4f &transform, int size)
+{
+    cgm::vec3f center = transform.mulVectorMatrix(model->center);
+    for(int p = 0; p < size; p++)
+    {
+        float distance = clippingPlanes[p].normal.dot(center) + clippingPlanes[p].distance;
+        if(distance < -model->radius)
+        {
+            return nullptr;
+        }
+    }
+
+    std::vector<Vertex> vertices;
+    for(int i = 0; i < model->vertices->size(); i++)
+    {
+        cgm::vec3f newVert = transform.mulVectorMatrix((*model->vertices)[i].Position);
+        vertices.push_back(Vertex(newVert, 1.0f, cgm::vec3f(1.0f)));
+    }
+
+    std::vector<Triangle> triangles = (*model->triangles);
+    for(int t = 0; t < size; t++)
+    {
+        std::vector<Triangle> newTris;
+        for(int i = 0; i < triangles.size(); i++)
+        {
+            ClipTriangle(triangles[i], clippingPlanes[t], &newTris, &vertices);
+        }
+        triangles = newTris;
+    }
+
+    Model newModel;
+
+    newModel.vertices = &vertices;
+    newModel.triangles = &triangles;
+    newModel.radius = model->radius;
+    newModel.center = center;
+
+    return &newModel;
+}
 
 void DrawWireFrameTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
 {
@@ -274,9 +355,14 @@ void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec
 }
 
 
-void RenderModel(Model &model)
+void RenderModel(Model &model, Camera &camera, cgm::Matrix4x4f &transform)
 {
     std::vector<cgm::vec3f> projected;
+    //Plane *clippingPlanes, Model *model, cgm::Matrix4x4f &transform, int size
+    Plane* clip = *(camera.clippingPlanes)[0];
+
+    auto clipped = TransformAndClip(camera.clippingPlanes, model, transform, 5);
+
     for(int i = 0; i < model.vertices->size(); i++)
     {
         projected.push_back(ProjectVertex((*model.vertices)[i].Position));
@@ -352,7 +438,7 @@ int main()
             Triangle(2, 7, 3),
    };
 
-    Model cube(vertices, triangles);
+    Model cube(vertices, triangles, cgm::vec3f(0.0f), sqrt(3));
     Camera camera(cgm::vec3f(-3.0f, 1.0f, 2.0f), -30.0f);
     cgm::Matrix4x4f view (1.0f);
     cgm::Matrix4x4f translation (1.0f);
@@ -364,7 +450,15 @@ int main()
     //translation =  translation.transpose();
 
     view = view * translation;
-
+    float st = sqrt(2) / 2.0f;
+    std::vector<Plane> planes = {
+            Plane(cgm::vec3f(0, 0, 1), -1),
+            Plane(cgm::vec3f(st, 0, st), 0),
+            Plane(cgm::vec3f(-st, 0, st), 0),
+            Plane(cgm::vec3f(0, -st, st), 0),
+            Plane(cgm::vec3f(0, st, st), 0),
+    };
+    camera.clippingPlanes = &planes;
 
 
     cgm::Matrix4x4f model = cgm::Matrix4x4f (1.0f);
@@ -373,8 +467,6 @@ int main()
     model = model.scale(model, cgm::vec3f(0.75f));
 
     model = view * model;
-
-    std::cout << model << std::endl;/********************/
 
     std::vector<Vertex> transformedVertex(vertices);
     for(int i = 0; i < vertices.size(); i++)
@@ -388,11 +480,7 @@ int main()
     model = cgm::Matrix4x4f (1.0f);
     model = model.translate(model, cgm::vec3f(1.25f, 2.5f, 7.5f));
     model = model.rotateY(model,  195.0f);
-    //model = model.scale(model, cgm::vec3f(1.0f));
-
     model = view * model;
-
-    std::cout << model << std::endl;/********************/
 
     transformedVertex.clear();
     transformedVertex = std::vector<Vertex>(vertices);
@@ -401,7 +489,8 @@ int main()
         transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
     }
     cube.vertices = &transformedVertex;
-    RenderModel(cube);
+
+    RenderModel(cube, camera);
 
 #endif //RST
 
