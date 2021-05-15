@@ -302,7 +302,7 @@ namespace cgm {
         Matrix4x4 rotateY(Matrix4x4<T> &m, float angle)
         {
             float cs = cos(angle * PI/180);
-            float sn = cos(angle * PI/180);
+            float sn = sin(angle * PI/180);
 
             Matrix4x4<T> t(cs,  0,  -sn, 0,
                            0,   1,  0,   0,

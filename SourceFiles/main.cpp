@@ -77,7 +77,7 @@ public:
     std::vector<Plane> *clippingPlanes;
 
     Camera(const cgm::vec3f &pos, float orient)
-        : Position(pos), Orientation(orient))  {};
+        : Position(pos), Orientation(orient) {};
 };
 
 cgm::vec3f ViewportToCanvas(cgm::vec3f &v)
@@ -85,7 +85,7 @@ cgm::vec3f ViewportToCanvas(cgm::vec3f &v)
     return cgm::vec3f(v.x*CANVAS_W/viewPortSize, v.y*CANVAS_H/viewPortSize, v.z);
 }
 
-cgm::vec3f ProjectVertex(cgm::vec3f &v)
+cgm::vec3f ProjectVertex(const cgm::vec3f &v)
 {
     cgm::vec3f temp = cgm::vec3f(v.x*projectionPlaneDistance/v.z, v.y*projectionPlaneDistance/v.z, v.z);
     return ViewportToCanvas(temp);
@@ -218,7 +218,7 @@ void ClipTriangle(Triangle triangle, Plane plane, std::vector<Triangle> *triangl
     }
 }
 
-Model* TransformAndClip(Plane *clippingPlanes, Model *model, cgm::Matrix4x4f &transform, int size)
+void TransformAndClip(std::vector<Plane> &clippingPlanes, Model* model, cgm::Matrix4x4f &transform, int size)
 {
     cgm::vec3f center = transform.mulVectorMatrix(model->center);
     for(int p = 0; p < size; p++)
@@ -226,42 +226,36 @@ Model* TransformAndClip(Plane *clippingPlanes, Model *model, cgm::Matrix4x4f &tr
         float distance = clippingPlanes[p].normal.dot(center) + clippingPlanes[p].distance;
         if(distance < -model->radius)
         {
-            return nullptr;
+            model->vertices = nullptr;
+            return;
         }
     }
 
-    std::vector<Vertex> vertices;
+    auto* vertices = new std::vector<Vertex>;
     for(int i = 0; i < model->vertices->size(); i++)
     {
         cgm::vec3f newVert = transform.mulVectorMatrix((*model->vertices)[i].Position);
-        vertices.push_back(Vertex(newVert, 1.0f, cgm::vec3f(1.0f)));
+        vertices->push_back(Vertex(newVert, 1.0f, (*model->vertices)[i].Color));
     }
 
-    std::vector<Triangle> triangles = (*model->triangles);
+    auto* triangles = new std::vector<Triangle>(*model->triangles);
     for(int t = 0; t < size; t++)
     {
-        std::vector<Triangle> newTris;
-        for(int i = 0; i < triangles.size(); i++)
+        auto* newTris = new std::vector<Triangle>;
+        for(int i = 0; i < triangles->size(); i++)
         {
-            ClipTriangle(triangles[i], clippingPlanes[t], &newTris, &vertices);
+            ClipTriangle((*triangles)[i], clippingPlanes[t], newTris, vertices);
         }
         triangles = newTris;
     }
 
-    Model newModel;
-
-    newModel.vertices = &vertices;
-    newModel.triangles = &triangles;
-    newModel.radius = model->radius;
-    newModel.center = center;
-
-    return &newModel;
+    model->vertices = vertices;
+    model->triangles = triangles;
+    model->center = center;
 }
 
 void DrawWireFrameTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
 {
-//    std::cout << p0.x << " " <<  p0.y << " " <<  p0.z << "; " << p1.x << " " << p1.y <<" " << p1.z << "; " << p2.x <<" " << p2.y <<" " << p2.z << std::endl;
-
     DrawLine(p0, p1, color);
     DrawLine(p1, p2, color);
     DrawLine(p0, p2, color);
@@ -355,24 +349,29 @@ void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec
 }
 
 
-void RenderModel(Model &model, Camera &camera, cgm::Matrix4x4f &transform)
+void RenderModel(Model &model, Camera &camera, cgm::Matrix4x4f &transform, std::vector<Vertex>* vertices)
 {
-    std::vector<cgm::vec3f> projected;
-    //Plane *clippingPlanes, Model *model, cgm::Matrix4x4f &transform, int size
-    Plane* clip = *(camera.clippingPlanes)[0];
+    model.vertices = vertices;
+    TransformAndClip(*camera.clippingPlanes, &model, transform, 5 );
 
-    auto clipped = TransformAndClip(camera.clippingPlanes, model, transform, 5);
+    if(model.vertices == nullptr)
+        return;
 
     for(int i = 0; i < model.vertices->size(); i++)
     {
-        projected.push_back(ProjectVertex((*model.vertices)[i].Position));
+        (*model.vertices)[i].Position = ProjectVertex((*model.vertices)[i].Position);
     }
+
 
     for(int i = 0; i < model.triangles->size(); i++)
     {
         Triangle tr = (*model.triangles)[i];
-        DrawWireFrameTriangle(projected[tr.vertexIndices[0]],projected[tr.vertexIndices[1]],
-            projected[tr.vertexIndices[2]], (*model.vertices)[tr.vertexIndices[0]].Color);
+
+        cgm::vec3f v1 = (*model.vertices)[tr.vertexIndices[0]].Position;
+        cgm::vec3f v2 = (*model.vertices)[tr.vertexIndices[1]].Position;
+        cgm::vec3f v3 = (*model.vertices)[tr.vertexIndices[2]].Position;
+
+        DrawWireFrameTriangle(v1, v2, v3, (*model.vertices)[tr.vertexIndices[0]].Color);
     }
 }
 
@@ -467,14 +466,15 @@ int main()
     model = model.scale(model, cgm::vec3f(0.75f));
 
     model = view * model;
-
-    std::vector<Vertex> transformedVertex(vertices);
-    for(int i = 0; i < vertices.size(); i++)
-    {
-        transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
-    }
-    cube.vertices = &transformedVertex;
-    RenderModel(cube);
+//    std::cout << model << std::endl;
+//
+//    std::vector<Vertex> transformedVertex(vertices);
+//    for(int i = 0; i < vertices.size(); i++)
+//    {
+//        transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
+//    }
+//    cube.vertices = &transformedVertex;
+    RenderModel(cube, camera, model, &vertices);
 
 
     model = cgm::Matrix4x4f (1.0f);
@@ -482,54 +482,20 @@ int main()
     model = model.rotateY(model,  195.0f);
     model = view * model;
 
-    transformedVertex.clear();
-    transformedVertex = std::vector<Vertex>(vertices);
-    for(int i = 0; i < vertices.size(); i++)
-    {
-        transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
-    }
-    cube.vertices = &transformedVertex;
+//    std::cout << model << std::endl;
 
-    RenderModel(cube, camera);
+//    transformedVertex.clear();
+//    transformedVertex = std::vector<Vertex>(vertices);
+//    for(int i = 0; i < vertices.size(); i++)
+//    {
+//        transformedVertex[i].Position = model.mulVectorMatrix(vertices[i].Position);
+//    }
+//    cube.vertices = &transformedVertex;
+
+    RenderModel(cube, camera, model, &vertices);
 
 #endif //RST
 
-#ifdef TestCube //For tests, will be cleaned after book completing
-    cgm::vec3f vA(-2.0f, -0.5f, 5.0f);
-    cgm::vec3f vB(-2.0f, 0.5f, 5.0f);
-    cgm::vec3f vC(-1.0f, 0.5f, 5.0f);
-    cgm::vec3f vD(-1.0f, -0.5f, 5.0f);
-
-    cgm::vec3f vAb(-2.0f, -0.5f, 6.0f);
-    cgm::vec3f vBb(-2.0f, 0.5f, 6.0f);
-    cgm::vec3f vCb(-1.0f, 0.5f, 6.0f);
-    cgm::vec3f vDb(-1.0f, -0.5f, 6.0f);
-
-    vA = ProjectVertex(vA);
-    vB = ProjectVertex(vB);
-    vC = ProjectVertex(vC);
-    vD = ProjectVertex(vD);
-
-    vAb = ProjectVertex(vAb);
-    vBb = ProjectVertex(vBb);
-    vCb = ProjectVertex(vCb);
-    vDb = ProjectVertex(vDb);
-
-    DrawLine(vA, vB, red);
-    DrawLine(vB, vC, red);
-    DrawLine(vC, vD, red);
-    DrawLine(vD, vA, red);
-
-    DrawLine(vAb, vBb, blue);
-    DrawLine(vBb, vCb, blue);
-    DrawLine(vCb, vDb, blue);
-    DrawLine(vDb, vAb, blue);
-
-    DrawLine(vAb, vA, green);
-    DrawLine(vBb, vB, green);
-    DrawLine(vCb, vC, green);
-    DrawLine(vDb, vD, green);
-#endif
     GenerateImage();
     return 0;
 }
