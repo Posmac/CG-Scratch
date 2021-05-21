@@ -15,7 +15,7 @@ cgm::vec3f cyan(0.0f, 255.0f, 255.0f);
 cgm::vec3f black (0.0f);
 cgm::vec3f white (255.0f);
 
-
+std::vector<float>* depthBuffer = new std::vector<float>(CANVAS_H*CANVAS_W);
 
 float viewPortSize = 1;
 float projectionPlaneDistance = 1;
@@ -313,37 +313,103 @@ void DrawShadedTriangle(Vertex &v0, Vertex &v1, Vertex &v2, cgm::vec3f &color)
 
 }
 
-void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color)
-{
-    if(p1.y < p0.y) { Swap(&p1, &p0); }
-    if(p2.y < p0.y) { Swap(&p2, &p0); }
-    if(p2.y < p1.y) { Swap(&p2, &p1); }
 
-    std::vector<float> x01 = Interpolate(p0.y, p0.x, p1.y, p1.x);
-    std::vector<float> x12 = Interpolate(p1.y, p1.x, p2.y, p2.x);
-    std::vector<float> x02 = Interpolate(p0.y, p0.x, p2.y, p2.x);
+cgm::vec3f CalculateTriangleNormal(cgm::vec3f &v1, cgm::vec3f &v2, cgm::vec3f &v3)
+{
+    cgm::vec3f v12 = v2 - v1;
+    cgm::vec3f v13 = v3 - v1;
+    cgm::vec3f cross = v12.cross(v13);
+    return cross;
+}
+bool CheckDepthBuffer(float x,float y,float zcan)
+{
+    x = CANVAS_W/2 + x;
+    y = CANVAS_H/2 - y - 1;
+    if(x < 0 || x >= CANVAS_W || y < 0 || y >= CANVAS_H)
+        return false;
+
+    int offset = x + CANVAS_W*y;
+
+    if((*depthBuffer)[offset] < zcan)
+    {
+        (*depthBuffer)[offset] = zcan;
+        return true;
+    }
+    return false;
+}
+
+void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color, Triangle& triangle, Model& model)
+{
+    int indices[3] = {0,0,0};
+    indices[0] = triangle.vertexIndices[0];
+    indices[1] = triangle.vertexIndices[1];
+    indices[2] = triangle.vertexIndices[2];
+
+    cgm::vec3f p00(p0);
+    cgm::vec3f p11(p1);
+    cgm::vec3f p22(p2);
+
+    if(p11.y < p00.y) { Swap(&p11, &p00); int swap = indices[0]; indices[0] = indices[1]; indices[1] = swap;}
+    if(p22.y < p00.y) { Swap(&p22, &p00);  int swap = indices[0]; indices[0] = indices[2]; indices[2] = swap;}
+    if(p22.y < p11.y) { Swap(&p22, &p11);  int swap = indices[1]; indices[1] = indices[2]; indices[2] = swap;}
+
+    cgm::vec3f v0 = (*model.vertices)[indices[0]].Position;
+    cgm::vec3f v1 = (*model.vertices)[indices[1]].Position;
+    cgm::vec3f v2 = (*model.vertices)[indices[2]].Position;
+
+    cgm::vec3f normal = CalculateTriangleNormal(p00,p11,p22);
+
+    cgm::vec3f center = (-1.0f/3.0f) * (p00+p11+p22);
+//    if(center.dot(normal) < 0)
+//        return;
+
+    std::vector<float> x01 = Interpolate(p00.y, p00.x, p11.y, p11.x);
+    std::vector<float> x12 = Interpolate(p11.y, p11.x, p22.y, p22.x);
+    std::vector<float> x02 = Interpolate(p00.y, p00.x, p22.y, p22.x);
 
     std::vector<float> x012(x01);
     for(int i = 0; i < x12.size(); i++)
         x012.push_back(x12[i]);
 
+
+    std::vector<float> x01z = Interpolate(p00.y, 1/v0.z, p11.y, 1/v1.z);
+    std::vector<float> x12z = Interpolate(p11.y, 1/v1.z, p22.y, 1/v2.z);
+    std::vector<float> x02z = Interpolate(p00.y, 1/v0.z, p22.y, 1/v2.z);
+    std::vector<float> x012z(x01z);
+    for(int i = 0; i < x12z.size(); i++)
+        x012z.push_back(x12z[i]);
+
+
     std::vector<float> x_left, x_right;
+    std::vector<float> xz_left, xz_right;
     int m = x02.size()/2;
     if(x02[m] < x012[m])
     {
         x_left = x02;
         x_right = x012;
+        xz_left = x02z;
+        xz_right = x012z;
     }
     else
     {
         x_left = x012;
         x_right = x02;
+        xz_left = x012z;
+        xz_right = x02z;
     }
-    for(int y = p0.y; y <= p2.y; y++)
+    for(int y = p00.y; y <= p22.y; y++)
     {
-        for(int x = x_left[y-p0.y]; x <= x_right[y - p0.y]; x++)
+        int xl = x_left[y-p00.y];
+        int xr = x_right[y-p00.y];
+
+        int zl = xz_left[y-p00.y];
+        int zr = xz_right[y-p00.y];
+        std::vector<float> zcan = Interpolate(xl, zl, xr, zr);
+
+        for(int x = xl; x < xr; x++)
         {
-            PutPixel(x,y, color);
+            if(CheckDepthBuffer(x,y,zcan[x-xl]))
+                PutPixel(x,y, color);
         }
     }
 }
@@ -371,7 +437,8 @@ void RenderModel(Model &model, Camera &camera, cgm::Matrix4x4f &transform, std::
         cgm::vec3f v2 = (*model.vertices)[tr.vertexIndices[1]].Position;
         cgm::vec3f v3 = (*model.vertices)[tr.vertexIndices[2]].Position;
 
-        DrawWireFrameTriangle(v1, v2, v3, (*model.vertices)[tr.vertexIndices[0]].Color);
+//        DrawWireFrameTriangle(v1, v2, v3, (*model.vertices)[tr.vertexIndices[0]].Color);
+        DrawFilledTriangle(v1, v2, v3, (*model.vertices)[tr.vertexIndices[0]].Color, tr,model);
     }
 }
 
@@ -409,6 +476,10 @@ int main()
 #endif //RT
 
 #ifdef RST //Rasterizer
+
+    for(int i = 0; i < depthBuffer->size(); i++)
+        (*depthBuffer)[i] = std::numeric_limits<float>::max();//fill depth buffer with infinite numbers
+
     std::vector<Vertex> vertices = std::vector<Vertex>
     {
             Vertex(cgm::vec3f(1.0f,1.0f,1.0f), 1.0f, red),
@@ -425,16 +496,16 @@ int main()
    {
             Triangle(0, 1, 2),
             Triangle(0, 2, 3),
-            Triangle(4, 0, 3),
-            Triangle(4, 3, 7),
-            Triangle(5, 4, 7),
-            Triangle(5, 7, 6),
             Triangle(1, 5, 6),
             Triangle(1, 6, 2),
-            Triangle(4, 5, 1),
-            Triangle(4, 1, 0),
             Triangle(2, 6, 7),
             Triangle(2, 7, 3),
+            Triangle(4, 0, 3),
+            Triangle(4, 1, 0),
+            Triangle(4, 3, 7),
+            Triangle(4, 5, 1),
+            Triangle(5, 4, 7),
+            Triangle(5, 7, 6),
    };
 
     Model cube(vertices, triangles, cgm::vec3f(0.0f), sqrt(3));
@@ -458,7 +529,6 @@ int main()
             Plane(cgm::vec3f(0, st, st), 0),
     };
     camera.clippingPlanes = &planes;
-
 
     cgm::Matrix4x4f model = cgm::Matrix4x4f (1.0f);
     model = cgm::Matrix4x4f (1.0f);
