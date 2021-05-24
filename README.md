@@ -23,13 +23,16 @@ There i will develop RayTracer and Resterizer from scratch using C++, without an
   ![](images/raytraces.png)
    
 3) *Rasterizer*                                               
-   a) Lines                             
-   b) Filled Triangles                               
-   c) Shaded Triangles                                         
-   d) Perspective Projection                                          
-   e) Describing and Rendering a Scene                                                                                  
-   f) Clipping                                                                                                                                                                    
-   g) Hidden Surface Removal                                                                                  
+   a) Lines - **done**                        
+   b) Filled Triangles - **done**                               
+   c) Shaded Triangles - **done**                                         
+   d) Perspective Projection - **done**                                     
+   e) Describing and Rendering a Scene - **done**                                                                                 
+   f) Clipping - **done**                                                                                                                                 
+   g) Hidden Surface Removal - **debugging**                                                                                  
    h) Shading                                                                                  
    i) Textures                                                                                  
-   j) ......                                                                                  
+   *TODO: ....       
+   
+   **Final screenshot**
+   
