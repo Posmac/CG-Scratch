@@ -174,7 +174,8 @@ namespace cgm {
             return vec3(x, y, z);
         }
 
-        vec3 cross(const vec3<T> &v) {
+        vec3 cross(const vec3<T> &v)
+        {
             T xx = y * v.z - z * v.y;
             T yy = z * v.x - x * v.z;
             T zz = x * v.y - y * v.x;

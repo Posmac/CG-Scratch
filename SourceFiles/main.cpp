@@ -135,6 +135,7 @@ void GenerateImage()
 std::vector<float>& Interpolate(float i0,float d0, float i1, float d1)
 {
     std::vector<float> *values = new std::vector<float>;
+
     if(i0 == i1)
     {
         values->push_back(d0);
@@ -147,6 +148,7 @@ std::vector<float>& Interpolate(float i0,float d0, float i1, float d1)
         values->push_back(d);
         d += a;
     }
+
     return *values;
 }
 void DrawLine(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &color)
@@ -323,12 +325,12 @@ cgm::vec3f CalculateTriangleNormal(cgm::vec3f &v1, cgm::vec3f &v2, cgm::vec3f &v
 }
 bool CheckDepthBuffer(float x,float y,float zcan)
 {
-    x = CANVAS_W/2 + x;
-    y = CANVAS_H/2 - y - 1;
+    x = CANVAS_W/2.0f + x;
+    y = CANVAS_H/2.0f - y - 1;
     if(x < 0 || x >= CANVAS_W || y < 0 || y >= CANVAS_H)
         return false;
 
-    int offset = x + CANVAS_W*y;
+    int offset = x + CANVAS_W * y;
 
     if((*depthBuffer)[offset] < zcan)
     {
@@ -337,79 +339,127 @@ bool CheckDepthBuffer(float x,float y,float zcan)
     }
     return false;
 }
-
-void DrawFilledTriangle(cgm::vec3f &p0, cgm::vec3f &p1, cgm::vec3f &p2, cgm::vec3f &color, Triangle& triangle, Model& model)
+std::vector<int> SortedVertexIndices(Triangle &triangle, std::vector<Vertex>* projected)
 {
-    int indices[3] = {0,0,0};
-    indices[0] = triangle.vertexIndices[0];
-    indices[1] = triangle.vertexIndices[1];
-    indices[2] = triangle.vertexIndices[2];
+    std::vector<int> indices = {0,1,2};
+    int ind[3] = {triangle.vertexIndices[0], triangle.vertexIndices[1], triangle.vertexIndices[2]};
 
-    cgm::vec3f p00(p0);
-    cgm::vec3f p11(p1);
-    cgm::vec3f p22(p2);
+    if((*projected)[ind[indices[1]]].Position.y < (*projected)[ind[indices[0]]].Position.y)
+    {
+        int swap = indices[0];
+        indices[0] = indices[1];
+        indices[1] = swap;
+    }
+    if((*projected)[indices[indices[2]]].Position.y < (*projected)[ind[indices[0]]].Position.y)
+    {
+        int swap = indices[0];
+        indices[0] = indices[2];
+        indices[2] = swap;
+    }
+    if((*projected)[ind[indices[2]]].Position.y < (*projected)[ind[indices[1]]].Position.y)
+    {
+        int swap = indices[1];
+        indices[1] = indices[2];
+        indices[2] = swap;
+    }
+    return indices;
+}
+void EdgeInterpolate(float y0, float v0, float y1, float v1, float y2, float v2, std::vector<float>* x02, std::vector<float>* x012)
+{
+    std::vector<float> v01 = Interpolate(y0, v0, y1,v1);
+    std::vector<float> v12 = Interpolate(y1, v1, y2,v2);
+    std::vector<float> v02 = Interpolate(y0, v0, y2,v2);
 
-    if(p11.y < p00.y) { Swap(&p11, &p00); int swap = indices[0]; indices[0] = indices[1]; indices[1] = swap;}
-    if(p22.y < p00.y) { Swap(&p22, &p00);  int swap = indices[0]; indices[0] = indices[2]; indices[2] = swap;}
-    if(p22.y < p11.y) { Swap(&p22, &p11);  int swap = indices[1]; indices[1] = indices[2]; indices[2] = swap;}
-
-    cgm::vec3f v0 = (*model.vertices)[indices[0]].Position;
-    cgm::vec3f v1 = (*model.vertices)[indices[1]].Position;
-    cgm::vec3f v2 = (*model.vertices)[indices[2]].Position;
-
-    cgm::vec3f normal = CalculateTriangleNormal(p00,p11,p22);
-
-    cgm::vec3f center = (-1.0f/3.0f) * (p00+p11+p22);
-//    if(center.dot(normal) < 0)
+//    if(v01.size() == 0)
+//        return;
+//    if(v02.size() == 0)
+//        return;
+//    if(v12.size() == 0)
 //        return;
 
-    std::vector<float> x01 = Interpolate(p00.y, p00.x, p11.y, p11.x);
-    std::vector<float> x12 = Interpolate(p11.y, p11.x, p22.y, p22.x);
-    std::vector<float> x02 = Interpolate(p00.y, p00.x, p22.y, p22.x);
 
-    std::vector<float> x012(x01);
-    for(int i = 0; i < x12.size(); i++)
-        x012.push_back(x12[i]);
+    for(float & i : v02)
+        x02->push_back(i);
 
+    for(float & i : v01)
+        x012->push_back(i);
 
-    std::vector<float> x01z = Interpolate(p00.y, 1/v0.z, p11.y, 1/v1.z);
-    std::vector<float> x12z = Interpolate(p11.y, 1/v1.z, p22.y, 1/v2.z);
-    std::vector<float> x02z = Interpolate(p00.y, 1/v0.z, p22.y, 1/v2.z);
-    std::vector<float> x012z(x01z);
-    for(int i = 0; i < x12z.size(); i++)
-        x012z.push_back(x12z[i]);
+    for(float & i : v12)
+        x012->push_back(i);
 
+    return;
+}
+void DrawFilledTriangle(Triangle &triangle,
+                        std::vector<Vertex>* verticesTransformed,
+                        std::vector<Vertex>* projectedVertices)
+{
+    std::vector<int> indices = SortedVertexIndices(triangle,projectedVertices);
+    int i0 = indices[0];
+    int i1 = indices[1];
+    int i2 = indices[2];
 
-    std::vector<float> x_left, x_right;
-    std::vector<float> xz_left, xz_right;
-    int m = x02.size()/2;
+    Vertex v0 = (*verticesTransformed)[triangle.vertexIndices[i0]];
+    Vertex v1 = (*verticesTransformed)[triangle.vertexIndices[i1]];
+    Vertex v2 = (*verticesTransformed)[triangle.vertexIndices[i2]];
+
+    cgm::vec3f normal = CalculateTriangleNormal((*verticesTransformed)[triangle.vertexIndices[0]].Position,
+                                                 (*verticesTransformed)[triangle.vertexIndices[1]].Position,
+                                                 (*verticesTransformed)[triangle.vertexIndices[2]].Position);
+
+    cgm::vec3f center = (-1.0f/3.0f) * ((*verticesTransformed)[triangle.vertexIndices[0]].Position +
+                                        (*verticesTransformed)[triangle.vertexIndices[1]].Position +
+                                        (*verticesTransformed)[triangle.vertexIndices[2]].Position);
+
+    if(center.dot(normal) < 0) {return;}
+
+    Vertex p0 = (*projectedVertices)[i0];
+    Vertex p1 = (*projectedVertices)[i1];
+    Vertex p2 = (*projectedVertices)[i2];
+
+//    std::cout << p0.Position << p1.Position << p2.Position << std::endl;
+
+    std::vector<float> x02, x012, iz02, iz012;
+
+//    std::cout << p0.Position << " " << p1.Position << "  " << p2.Position << std::endl;
+
+    EdgeInterpolate(p0.Position.y, p0.Position.x, p1.Position.y, p1.Position.x, p2.Position.y, p2.Position.x, &x02, &x012);
+    EdgeInterpolate(p0.Position.y, 1.0f/v0.Position.z,p1.Position.y, 1.0f/v1.Position.z, p2.Position.y, 1.0f/v2.Position.z, &iz02, &iz012);
+
+    int m = x02.size()/2 | 0;
+
+    std::vector<float> x_left, x_right, iz_left, iz_right;
+
     if(x02[m] < x012[m])
     {
         x_left = x02;
         x_right = x012;
-        xz_left = x02z;
-        xz_right = x012z;
+        iz_left = iz02;
+        iz_right = iz012;
     }
     else
     {
         x_left = x012;
         x_right = x02;
-        xz_left = x012z;
-        xz_right = x02z;
+        iz_left = iz012;
+        iz_right = iz02;
     }
-    for(int y = p00.y; y <= p22.y; y++)
-    {
-        int xl = x_left[y-p00.y];
-        int xr = x_right[y-p00.y];
 
-        int zl = xz_left[y-p00.y];
-        int zr = xz_right[y-p00.y];
-        std::vector<float> zcan = Interpolate(xl, zl, xr, zr);
+    for(int y = p0.Position.y; y < p2.Position.y; y++)
+    {
+        float xl, xr;
+        xl = x_left[y - p0.Position.y];
+        xr = x_right[y - p0.Position.y];
+
+        float zl, zr;
+        zl = iz_left[y-p0.Position.y];
+        zr = iz_right[y-p0.Position.y];
+
+        std::vector<float> zscan = Interpolate(xl, zl, xr, zr);
 
         for(int x = xl; x < xr; x++)
         {
-            if(CheckDepthBuffer(x,y,zcan[x-xl]))
-                PutPixel(x,y, color);
+            if(CheckDepthBuffer(x,y, zscan[x-xl]))
+                PutPixel(x,y, (*verticesTransformed)[0].Color);
         }
     }
 }
@@ -422,6 +472,8 @@ void RenderModel(Model &model, Camera &camera, cgm::Matrix4x4f &transform, std::
 
     if(model.vertices == nullptr)
         return;
+
+    std::vector<Vertex> initVertices (*model.vertices);
 
     for(int i = 0; i < model.vertices->size(); i++)
     {
@@ -438,7 +490,7 @@ void RenderModel(Model &model, Camera &camera, cgm::Matrix4x4f &transform, std::
         cgm::vec3f v3 = (*model.vertices)[tr.vertexIndices[2]].Position;
 
 //        DrawWireFrameTriangle(v1, v2, v3, (*model.vertices)[tr.vertexIndices[0]].Color);
-        DrawFilledTriangle(v1, v2, v3, (*model.vertices)[tr.vertexIndices[0]].Color, tr,model);
+        DrawFilledTriangle(tr, &initVertices, model.vertices);
     }
 }
 
@@ -478,7 +530,8 @@ int main()
 #ifdef RST //Rasterizer
 
     for(int i = 0; i < depthBuffer->size(); i++)
-        (*depthBuffer)[i] = std::numeric_limits<float>::max();//fill depth buffer with infinite numbers
+//        (*depthBuffer)[i] = std::numeric_limits<float>::max();//fill depth buffer with infinite numbers
+        (*depthBuffer)[i] = 0;//fill depth buffer with infinite numbers
 
     std::vector<Vertex> vertices = std::vector<Vertex>
     {
