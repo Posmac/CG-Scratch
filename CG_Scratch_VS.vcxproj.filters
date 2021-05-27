@@ -1,0 +1,1319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceFiles\Camera.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Canvas.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Ray.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Scene.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Headers\glm\detail\func_common.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_common_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_exponential.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_exponential_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_geometric.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_geometric_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_integer.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_integer_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_matrix.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_matrix_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_packing.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_packing_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_trigonometric.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_trigonometric_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_vector_relational.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\func_vector_relational_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_half.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat2x2.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat2x3.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat2x4.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat3x2.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat3x3.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat3x4.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat4x2.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat4x3.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat4x4.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_mat4x4_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_quat.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_quat_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_vec1.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_vec2.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_vec3.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_vec4.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\detail\type_vec4_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\matrix_clip_space.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\matrix_common.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\matrix_projection.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\matrix_relational.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\matrix_transform.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_common.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_common_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_exponential.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_geometric.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_relational.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_transform.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\quaternion_trigonometric.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\scalar_common.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\scalar_constants.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\scalar_integer.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\scalar_packing.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\scalar_relational.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\scalar_ulp.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\vector_common.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\vector_integer.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\vector_packing.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\vector_relational.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\ext\vector_ulp.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\bitfield.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\color_space.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\constants.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\epsilon.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\integer.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\matrix_access.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\matrix_inverse.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\matrix_transform.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\noise.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\packing.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\quaternion.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\quaternion_simd.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\random.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\reciprocal.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\round.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\type_precision.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\type_ptr.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtc\ulp.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\associated_min_max.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\bit.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\closest_point.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\color_encoding.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\color_space.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\color_space_YCoCg.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\common.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\compatibility.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\component_wise.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\dual_quaternion.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\easing.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\euler_angles.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\extend.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\extended_min_max.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\exterior_product.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\fast_exponential.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\fast_square_root.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\fast_trigonometry.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\float_notmalize.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\functions.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\gradient_paint.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\handed_coordinate_space.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\hash.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\integer.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\intersect.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\io.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\log_base.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_cross_product.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_decompose.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_factorisation.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_interpolation.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_major_storage.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_operation.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_query.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\matrix_transform_2d.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\mixed_product.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\norm.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\normal.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\normalize_dot.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\number_precision.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\optimum_pow.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\orthonormalize.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\perpendicular.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\polar_coordinates.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\projection.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\quaternion.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\raw_data.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\rotate_normalized_axis.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\rotate_vector.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\scalar_relational.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\spline.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\std_based_type.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\string_cast.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\texture.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\transform.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\transform2.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\type_aligned.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\type_trait.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\vector_angle.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\vector_query.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include="Headers\glm\gtx\wrap.inl">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+    <None Include=".gitignore" />
+    <None Include="FinalImage.ppm" />
+    <None Include="Raster.ppm" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\glm\detail\_features.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\_fixes.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\_noise.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\_swizzle.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\_swizzle_func.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\_vectorize.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\compute_common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\compute_vector_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\qualifier.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\setup.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_float.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_half.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat2x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat2x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat2x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat3x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat3x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat3x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat4x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat4x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_mat4x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_quat.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_vec1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_vec2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_vec3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\detail\type_vec4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_clip_space.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double2x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double2x2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double2x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double2x3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double2x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double2x4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double3x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double3x2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double3x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double3x3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double3x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double3x4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double4x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double4x2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double4x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double4x3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double4x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_double4x4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float2x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float2x2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float2x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float2x3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float2x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float2x4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float3x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float3x2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float3x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float3x3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float3x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float3x4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float4x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float4x2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float4x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float4x3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float4x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_float4x4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int2x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int2x2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int2x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int2x3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int2x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int2x4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int3x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int3x2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int3x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int3x3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int3x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int3x4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int4x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int4x2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int4x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int4x3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int4x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_int4x4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_projection.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_transform.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint2x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint2x2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint2x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint2x3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint2x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint2x4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint3x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint3x2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint3x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint3x3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint3x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint3x4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint4x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint4x2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint4x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint4x3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint4x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\matrix_uint4x4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_double.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_double_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_exponential.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_float.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_float_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_geometric.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_transform.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\quaternion_trigonometric.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_constants.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_int_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_integer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_packing.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_uint_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\scalar_ulp.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool1_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_bool4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double1_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_double4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float1_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float2_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float3_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_float4_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int1_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_int4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_integer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_packing.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint1_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint2_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint3_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_uint4_sized.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext\vector_ulp.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\bitfield.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\color_space.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\constants.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\epsilon.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\integer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\matrix_access.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\matrix_integer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\matrix_inverse.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\matrix_transform.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\noise.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\packing.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\quaternion.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\random.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\reciprocal.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\round.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\type_aligned.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\type_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\type_ptr.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\ulp.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtc\vec1.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\associated_min_max.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\bit.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\closest_point.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\color_encoding.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\color_space.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\color_space_YCoCg.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\compatibility.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\component_wise.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\dual_quaternion.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\easing.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\euler_angles.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\extend.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\extended_min_max.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\exterior_product.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\fast_exponential.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\fast_square_root.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\fast_trigonometry.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\functions.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\gradient_paint.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\handed_coordinate_space.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\hash.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\integer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\intersect.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\io.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\log_base.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_cross_product.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_decompose.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_factorisation.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_interpolation.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_major_storage.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_operation.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_query.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\matrix_transform_2d.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\mixed_product.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\norm.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\normal.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\normalize_dot.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\number_precision.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\optimum_pow.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\orthonormalize.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\perpendicular.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\polar_coordinates.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\projection.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\quaternion.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\range.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\raw_data.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\rotate_normalized_axis.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\rotate_vector.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\scalar_multiplication.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\scalar_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\spline.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\std_based_type.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\string_cast.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\texture.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\transform.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\transform2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\type_aligned.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\type_trait.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\vec_swizzle.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\vector_angle.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\vector_query.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\gtx\wrap.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\common.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\exponential.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\geometric.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\integer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\matrix.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\neon.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\packing.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\platform.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\trigonometric.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\simd\vector_relational.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\common.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\exponential.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\ext.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\fwd.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\geometric.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\glm.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\integer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat2x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat2x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat2x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat3x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat3x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat3x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat4x2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat4x3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\mat4x4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\matrix.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\packing.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\trigonometric.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\vec2.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\vec3.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\vec4.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\glm\vector_relational.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Camera.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Canvas.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\custom_math.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Light.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Ray.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Scene.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Sphere.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="out\build\x64-Debug (по умолчанию)\CMakeFiles\ShowIncludes\foo.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceFiles\Old.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

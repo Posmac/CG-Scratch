@@ -1,0 +1,2 @@
+D:\Education\C C++\CG_Scratch_VS\CG_Scratch_VS\Debug\CG_Scratch_VS.exe
+D:\Education\C C++\CG_Scratch_VS\CG_Scratch_VS\Debug\CG_Scratch_VS.pdb

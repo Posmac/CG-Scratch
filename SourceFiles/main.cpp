@@ -1,6 +1,5 @@
 #include "Scene.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+
 #define CANVAS_W 600
 #define CANVAS_H 600
 #define RECURSION_DEPTH 6
